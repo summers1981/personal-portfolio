@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Get in touch with Colin Summers — design architect for AI/LLM systems." />
+  <title>Contact — Colin Summers</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: clamp(32px, 5vw, 56px);
+      max-width: 640px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      font-family: var(--font-body);
+      color: var(--text);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+
+    .form-group textarea {
+      min-height: 130px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      background: var(--accent);
+      color: #000;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .form-submit:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .availability-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-radius: 100px;
+      padding: 6px 14px;
+      margin-top: 20px;
+    }
+
+    .availability-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">C<span class="dot">.</span>S<span class="dot">.</span></a>
+      <div class="nav-links">
+        <a href="work.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="nav-cta active" style="background:var(--accent);color:#000;">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="index.html">Home</a>
+    <a href="work.html">Work</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-label fade-up fade-up-1">Contact</span>
+      <h1 class="fade-up fade-up-2">Let's build something<br><span class="accent-text">intelligent together</span></h1>
+      <p class="fade-up fade-up-3">
+        Whether you're scaling a design system, exploring AI in your product, or need someone to connect the dots between the two — let's talk.
+      </p>
+      <div class="availability-badge fade-up fade-up-4">
+        <span class="dot"></span>
+        Available for new projects
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT OPTIONS -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Contact channels -->
+      <div class="contact-grid fade-up fade-up-1">
+        <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener" class="contact-card">
+          <div class="contact-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" stroke="#F7C948" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="2" y="9" width="4" height="12" stroke="#F7C948" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="4" cy="4" r="2" stroke="#F7C948" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>LinkedIn</h3>
+          <p>Connect professionally and see my full career history.</p>
+          <span class="contact-handle">@summers1981</span>
+        </a>
+
+        <a href="https://twitter.com/summers1981" target="_blank" rel="noopener" class="contact-card">
+          <div class="contact-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4l16 16M4 20L20 4" stroke="#F7C948" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Twitter / X</h3>
+          <p>Thoughts on design systems, AI, and whatever's on my mind.</p>
+          <span class="contact-handle">@summers1981</span>
+        </a>
+
+        <a href="mailto:hello@colinsummers.net" class="contact-card">
+          <div class="contact-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="4" width="20" height="16" rx="3" stroke="#F7C948" stroke-width="1.5"/>
+              <path d="M2 7l10 7 10-7" stroke="#F7C948" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Email</h3>
+          <p>Best for project enquiries, collaborations, and deep conversations.</p>
+          <span class="contact-handle">hello@colinsummers.net</span>
+        </a>
+      </div>
+
+      <hr class="hr" />
+
+      <!-- Form + context -->
+      <div class="grid-2" style="gap:clamp(40px, 6vw, 80px); align-items:start;">
+
+        <!-- Left: form -->
+        <form class="contact-form fade-up fade-up-1" id="contact-form">
+          <h3 style="font-size:1.3rem; margin-bottom:8px; color:var(--text);">Send a message</h3>
+          <p style="font-size:0.88rem; margin-bottom:28px;">I read every message. I'll get back to you within a couple of days.</p>
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="topic">What's it about?</label>
+            <input type="text" id="topic" name="topic" placeholder="Design systems, AI architecture, collaboration…" />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell me what you're working on…" required></textarea>
+          </div>
+
+          <button type="submit" class="form-submit">Send message →</button>
+        </form>
+
+        <!-- Right: context -->
+        <div class="fade-up fade-up-2" style="padding-top:8px;">
+          <span class="section-label">Good to know</span>
+          <h2 style="margin-bottom:24px;">What I work on</h2>
+
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div style="padding:20px 24px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px;">
+              <h4 style="color:var(--accent); margin-bottom:8px; font-size:0.9rem;">🧱 Design System Architecture</h4>
+              <p style="font-size:0.86rem;">Building or scaling a design system? I help with structure, token architecture, component strategy, and team adoption.</p>
+            </div>
+            <div style="padding:20px 24px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px;">
+              <h4 style="color:var(--accent); margin-bottom:8px; font-size:0.9rem;">🤖 AI Design Strategy</h4>
+              <p style="font-size:0.86rem;">Integrating AI into your product? I help teams understand where design creates clarity, trust, and competitive advantage.</p>
+            </div>
+            <div style="padding:20px 24px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px;">
+              <h4 style="color:var(--accent); margin-bottom:8px; font-size:0.9rem;">🧭 Design Leadership</h4>
+              <p style="font-size:0.86rem;">Advising design teams, reviewing systems thinking, or helping position design as a strategic asset within your org.</p>
+            </div>
+          </div>
+
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-top:24px;">
+            Based in the UK · Available for remote &amp; in-person engagements
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">C.S.</span>
+        <div class="footer-links">
+          <a href="work.html">Work</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Re-assign form for the contact page specific handler
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('.form-submit');
+        btn.textContent = 'Message sent ✓';
+        btn.style.background = '#34d399';
+        btn.style.borderColor = '#34d399';
+        btn.style.color = '#000';
+        btn.disabled = true;
+      });
+    }
+  </script>
+</body>
+</html>
