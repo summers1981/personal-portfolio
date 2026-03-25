@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="UI Kit Modernisation — Building a faster, smarter UI kit in Figma. Colin Summers, Design Systems." />
+  <title>UI Kit Modernisation — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">Design Systems</span>
+      <h1 class="fade-up fade-up-2">Building a faster,<br>smarter <span class="accent-text">UI kit</span></h1>
+      <p class="fade-up fade-up-3">
+        Migrating from a fragmented Sketch setup to a scalable, contribution-ready Figma UI kit — rethinking the system rather than just porting it.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Design System Overhaul</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Tools</span>
+          <span class="project-meta-value">Figma · Design Tokens</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">Design Systems</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Components · Velocity · Adoption</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+          <!-- Grid of component frames -->
+          <rect x="40" y="40" width="180" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <rect x="240" y="40" width="180" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <rect x="440" y="40" width="180" height="120" rx="8" fill="#111" stroke="#F7C948" stroke-width="1.5"/>
+          <rect x="640" y="40" width="180" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <rect x="840" y="40" width="180" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <rect x="1040" y="40" width="120" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <!-- Component labels -->
+          <text x="130" y="90" fill="#444" font-family="monospace" font-size="11" text-anchor="middle">Button</text>
+          <rect x="80" y="98" width="100" height="28" rx="6" fill="#1A1A1A" stroke="#333"/>
+          <text x="130" y="118" fill="#666" font-family="monospace" font-size="9" text-anchor="middle">Primary</text>
+          <text x="330" y="90" fill="#444" font-family="monospace" font-size="11" text-anchor="middle">Input</text>
+          <rect x="256" y="98" width="168" height="28" rx="6" fill="#1A1A1A" stroke="#333"/>
+          <text x="340" y="118" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Placeholder text</text>
+          <text x="530" y="90" fill="#F7C948" font-family="monospace" font-size="11" text-anchor="middle">Card</text>
+          <rect x="456" y="98" width="148" height="48" rx="6" fill="#1A1A1A" stroke="#F7C948" stroke-width="1"/>
+          <text x="530" y="120" fill="#F7C948" font-family="monospace" font-size="8" text-anchor="middle">Content area</text>
+          <text x="730" y="90" fill="#444" font-family="monospace" font-size="11" text-anchor="middle">Badge</text>
+          <rect x="686" y="100" width="60" height="22" rx="11" fill="#1A1A1A" stroke="#333"/>
+          <text x="716" y="116" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Label</text>
+          <text x="930" y="90" fill="#444" font-family="monospace" font-size="11" text-anchor="middle">Modal</text>
+          <rect x="856" y="98" width="148" height="48" rx="6" fill="#1A1A1A" stroke="#333"/>
+          <!-- Row 2 -->
+          <rect x="40" y="200" width="380" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <rect x="440" y="200" width="380" height="120" rx="8" fill="#F7C948" fill-opacity="0.05" stroke="#F7C948" stroke-width="1"/>
+          <rect x="840" y="200" width="320" height="120" rx="8" fill="#111" stroke="#2E2E2E"/>
+          <text x="230" y="248" fill="#444" font-family="monospace" font-size="11" text-anchor="middle">Navigation</text>
+          <rect x="60" y="256" width="340" height="28" rx="4" fill="#1A1A1A" stroke="#2A2A2A"/>
+          <text x="80" y="276" fill="#555" font-family="monospace" font-size="8">Home</text>
+          <text x="130" y="276" fill="#555" font-family="monospace" font-size="8">Work</text>
+          <text x="180" y="276" fill="#555" font-family="monospace" font-size="8">About</text>
+          <text x="630" y="248" fill="#F7C948" font-family="monospace" font-size="11" text-anchor="middle">Data Table</text>
+          <rect x="460" y="256" width="340" height="10" rx="2" fill="#1A1A1A" stroke="#2A2A2A"/>
+          <rect x="460" y="272" width="340" height="10" rx="2" fill="#F7C948" fill-opacity="0.1" stroke="#F7C948" stroke-width="0.5"/>
+          <rect x="460" y="288" width="340" height="10" rx="2" fill="#1A1A1A" stroke="#1E1E1E"/>
+          <text x="1000" y="248" fill="#444" font-family="monospace" font-size="11" text-anchor="middle">Form</text>
+          <rect x="860" y="256" width="280" height="50" rx="4" fill="#1A1A1A" stroke="#2A2A2A"/>
+          <!-- Bottom label -->
+          <text x="40" y="344" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">FIGMA UI KIT · COMPONENT LIBRARY · DESIGN SYSTEM FOUNDATIONS</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>A centralised, scalable foundation for every team</h2>
+            <p>
+              The goal was to create a centralised, reliable, and scalable UI kit in Figma that would unlock better collaboration, reduce inconsistency, and enable faster iteration across product teams.
+            </p>
+            <p>
+              This wasn't about replicating existing Sketch files. It was an opportunity to rethink the system in a way that could better support growth, contribution, and velocity — building something the whole organisation could rely on and contribute back to.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>A system that was holding teams back</h2>
+            <p>The existing setup had accumulated technical debt and structural problems that slowed down every team touching product design.</p>
+            <ul class="challenge-list">
+              <li>The existing Sketch kit was outdated, fragmented, and hard to maintain</li>
+              <li>Teams were duplicating work or reinventing components due to confusion and misalignment</li>
+              <li>Designers and engineers lacked a single source of truth — especially around variants, states, and design language</li>
+              <li>Some designers were inadvertently creating fragmentation in the code through inconsistent design decisions</li>
+              <li>The migration needed to minimise development disruption while seizing the opportunity to genuinely improve, not just port</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>Rebuilt from foundations up</h2>
+            <p>
+              We built a Figma UI kit rooted in the design system foundations — clear architecture, reusable components, and contribution guidelines baked in from the start. The migration became a deliberate redesign.
+            </p>
+            <ul class="solution-list">
+              <li>Refactored and simplified components using variants and properties to reduce bloat and improve maintainability</li>
+              <li>Applied Figma styles throughout to ensure design language consistency across every surface</li>
+              <li>Established clear naming and structure conventions across foundations and components</li>
+              <li>Created Figma templates and usage guidelines to help teams adopt and contribute faster</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Structured to get it right</h2>
+            <p>A phased approach ensured nothing was missed and every team had a chance to validate the work before it landed.</p>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Audit & Mapping</h4>
+                  <p>Full audit of the existing Sketch components, cataloguing what existed, what was broken, what was duplicated, and what could be consolidated.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Design System Foundations First</h4>
+                  <p>Established colour, typography, spacing, and token structures in Figma before touching a single component — giving everything a consistent base to build from.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Component Refactoring</h4>
+                  <p>Rebuilt components with modern Figma practices — variants, component properties, auto layout — reducing complexity while improving flexibility.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Collaboration & Testing</h4>
+                  <p>Worked with designers and engineers across teams to validate components against real product use cases, surfacing edge cases early.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <h4>Enablement & Launch</h4>
+                  <p>Ran onboarding sessions, produced documentation, and launched with contribution guidelines so teams could get started and give back from day one.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Faster design, stronger alignment</h2>
+            <p>
+              The new Figma UI kit delivered measurable improvements across design velocity, cross-functional alignment, and long-term system health.
+            </p>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">⚡</div>
+                <h4>Faster Design Velocity</h4>
+                <p>Designers could assemble and iterate on screens significantly faster with reusable, well-structured components.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🤝</div>
+                <h4>Improved Design & Dev Alignment</h4>
+                <p>A shared source of truth reduced miscommunication and hand-off friction between design and engineering.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🔧</div>
+                <h4>Simplified Updates & Maintenance</h4>
+                <p>Changes to foundations and components propagated cleanly, making system-wide updates a fraction of the effort.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">📈</div>
+                <h4>Increased System Adoption</h4>
+                <p>Clear documentation and contribution pathways drove wider adoption — teams trusted the system and used it consistently.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>Quicker design iteration, more consistent experiences, and a stronger foundation for product development across the organisation.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Design Systems</span>
+              <span class="sidebar-tag">Component Architecture</span>
+              <span class="sidebar-tag">Figma</span>
+              <span class="sidebar-tag">Design Tokens</span>
+              <span class="sidebar-tag">Documentation</span>
+              <span class="sidebar-tag">Team Enablement</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Figma UI Kit</span>
+              <span class="sidebar-tag">Component Library</span>
+              <span class="sidebar-tag">Usage Guidelines</span>
+              <span class="sidebar-tag">Contribution Model</span>
+              <span class="sidebar-tag">Onboarding Docs</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

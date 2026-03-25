@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Improving data comprehension at scale through a consistent, redesigned reporting experience. Colin Summers, Design Systems." />
+  <title>Reporting Redesign — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">Product Design</span>
+      <h1 class="fade-up fade-up-2">Improving data comprehension<br><span class="accent-text">at scale</span></h1>
+      <p class="fade-up fade-up-3">
+        The reporting experience had become fragmented through incremental updates by multiple teams over time. Filters, titles, and dates were often missing, misaligned, or hard to interpret. As the customer base shifted toward larger practices, reporting became increasingly critical — and increasingly in need of a coherent redesign.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Experience Redesign</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">FreeAgent · 18 Reports</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">Product Design · Data</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Clarity · Consistency · Usability</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+          <!-- Report container -->
+          <rect x="80" y="20" width="1040" height="320" rx="10" fill="#111" stroke="#2E2E2E"/>
+          <!-- Report title bar -->
+          <rect x="80" y="20" width="1040" height="52" rx="10" fill="#1A1A1A" stroke="#2E2E2E"/>
+          <rect x="80" y="58" width="1040" height="14" fill="#1A1A1A"/>
+          <text x="108" y="50" fill="#EEE" font-family="monospace" font-size="13" font-weight="700">Profit &amp; Loss</text>
+          <!-- Date range pill -->
+          <rect x="880" y="32" width="210" height="28" rx="6" fill="#111" stroke="#F7C948" stroke-width="1"/>
+          <text x="985" y="50" fill="#F7C948" font-family="monospace" font-size="8" text-anchor="middle">1 Jan 2025 – 31 Mar 2025</text>
+          <!-- Filter bar -->
+          <rect x="80" y="72" width="1040" height="44" fill="#161616" stroke="#2E2E2E" stroke-width="0"/>
+          <line x1="80" y1="72" x2="1120" y2="72" stroke="#2E2E2E"/>
+          <line x1="80" y1="116" x2="1120" y2="116" stroke="#2E2E2E"/>
+          <text x="108" y="99" fill="#555" font-family="monospace" font-size="8">Basis</text>
+          <rect x="140" y="82" width="90" height="22" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="185" y="97" fill="#777" font-family="monospace" font-size="8" text-anchor="middle">Accrual ▾</text>
+          <text x="250" y="99" fill="#555" font-family="monospace" font-size="8">Currency</text>
+          <rect x="298" y="82" width="80" height="22" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="338" y="97" fill="#777" font-family="monospace" font-size="8" text-anchor="middle">GBP ▾</text>
+          <text x="398" y="99" fill="#555" font-family="monospace" font-size="8">Compare</text>
+          <rect x="450" y="82" width="100" height="22" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="500" y="97" fill="#777" font-family="monospace" font-size="8" text-anchor="middle">Prior year ▾</text>
+          <!-- Table header -->
+          <rect x="80" y="116" width="1040" height="32" fill="#1A1A1A"/>
+          <text x="108" y="136" fill="#555" font-family="monospace" font-size="8" font-weight="700">CATEGORY</text>
+          <text x="820" y="136" fill="#555" font-family="monospace" font-size="8" font-weight="700" text-anchor="end">JAN–MAR 2025</text>
+          <text x="1000" y="136" fill="#555" font-family="monospace" font-size="8" font-weight="700" text-anchor="end">JAN–MAR 2024</text>
+          <text x="1100" y="136" fill="#555" font-family="monospace" font-size="8" font-weight="700" text-anchor="end">CHANGE</text>
+          <!-- Table rows -->
+          <line x1="80" y1="148" x2="1120" y2="148" stroke="#1E1E1E"/>
+          <text x="108" y="166" fill="#888" font-family="monospace" font-size="8">Revenue</text>
+          <text x="820" y="166" fill="#CCC" font-family="monospace" font-size="9" text-anchor="end">£48,250.00</text>
+          <text x="1000" y="166" fill="#666" font-family="monospace" font-size="9" text-anchor="end">£41,800.00</text>
+          <text x="1100" y="166" fill="#4CAF50" font-family="monospace" font-size="9" text-anchor="end">+15.4%</text>
+          <line x1="80" y1="178" x2="1120" y2="178" stroke="#1E1E1E"/>
+          <text x="108" y="196" fill="#888" font-family="monospace" font-size="8">Cost of Sales</text>
+          <text x="820" y="196" fill="#CCC" font-family="monospace" font-size="9" text-anchor="end">£12,400.00</text>
+          <text x="1000" y="196" fill="#666" font-family="monospace" font-size="9" text-anchor="end">£10,950.00</text>
+          <text x="1100" y="196" fill="#F7795A" font-family="monospace" font-size="9" text-anchor="end">+13.2%</text>
+          <line x1="80" y1="208" x2="1120" y2="208" stroke="#1E1E1E"/>
+          <!-- Gross profit row - highlighted total -->
+          <rect x="80" y="208" width="1040" height="32" fill="#F7C948" fill-opacity="0.05"/>
+          <line x1="80" y1="208" x2="1120" y2="208" stroke="#F7C948" stroke-width="0.75" stroke-opacity="0.4"/>
+          <text x="108" y="228" fill="#F7C948" font-family="monospace" font-size="9" font-weight="700" opacity="0.9">Gross Profit</text>
+          <text x="820" y="228" fill="#F7C948" font-family="monospace" font-size="9" text-anchor="end" font-weight="700" opacity="0.9">£35,850.00</text>
+          <text x="1000" y="228" fill="#666" font-family="monospace" font-size="9" text-anchor="end">£30,850.00</text>
+          <text x="1100" y="228" fill="#4CAF50" font-family="monospace" font-size="9" text-anchor="end">+16.2%</text>
+          <line x1="80" y1="240" x2="1120" y2="240" stroke="#F7C948" stroke-width="0.75" stroke-opacity="0.4"/>
+          <!-- Bottom label -->
+          <text x="80" y="350" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">REPORTING REDESIGN · 18 REPORTS · DATA COMPREHENSION · CONSISTENCY AT SCALE</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>Reports that premium customers can rely on</h2>
+            <p>
+              The objective was to redesign the reporting experience to create clarity, consistency, and better data comprehension across an increasingly complex product serving accountants and high-value customers.
+            </p>
+            <p>
+              The work needed to support 18 different reports with a single, scalable system — reducing technical debt while building a foundation for premium reporting at scale.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>Fragmented by years of incremental change</h2>
+            <ul class="challenge-list">
+              <li>Filters, titles, and dates were often missing, misaligned, or hard to interpret</li>
+              <li>Tables lacked distinctive 'report-ness' — appearing as generic data grids</li>
+              <li>Date ranges and filter behaviors varied inconsistently across implementations</li>
+              <li>Different teams used disparate approaches, making system-wide improvements costly</li>
+              <li>Wide tables made it difficult for users to map numbers to headers</li>
+              <li>Titles and visible date ranges were absent from many reports</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>Structure, legibility, and consistency</h2>
+            <ul class="solution-list">
+              <li>Responsive report container adapting to small, medium, or large widths</li>
+              <li>Clear visual separation between filters and report content</li>
+              <li>Consistent titles and visible date ranges at the top of every report</li>
+              <li>Labelled filter controls with improved accessibility and logical grouping</li>
+              <li>Shared date component with consistent formatting and common/custom range selection</li>
+              <li>Monospace font for numerical data to enhance alignment and readability</li>
+              <li>Standardised filter behavior across all implementations</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Audit, design, test, and ship</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Audit & Discovery</h4>
+                  <p>Deep assessment of all reports across the product, identifying inconsistencies in filters, layouts, typography, and structural patterns.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Design & Collaboration</h4>
+                  <p>Led design work on layout, filters, and typography while coordinating with multiple product teams. Developed the report container to visually differentiate reports from standard tables.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Component Development</h4>
+                  <p>Introduced shared components including a new common date picker and filter group pattern. Published documentation and usage guidelines on FreeStyle.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Testing & Validation</h4>
+                  <p>Conducted usability testing with accountants and frequent reporting users. Findings were overwhelmingly positive, particularly around the new date component and date range clarity.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Measurable improvements for accountants</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">📊</div>
+                <h4>73% Better Comprehension</h4>
+                <p>73% of users reported the layout changes made it easier to understand report data immediately after the redesign.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">📅</div>
+                <h4>83% Faster Date Navigation</h4>
+                <p>83% found the new date component simplified locating and applying date ranges in their reporting workflows.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">📋</div>
+                <h4>18 Reports Updated</h4>
+                <p>The new pattern was rolled out across all 18 reports in the product, delivering consistency at scale.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🔢</div>
+                <h4>Improved Numerical Legibility</h4>
+                <p>Monospace typography measurably improved alignment and readability of numerical data across all reports.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>Customer experience consistency and quality at scale — transforming fragmented, inconsistent reporting into a cohesive system serving accountants and high-value users.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Product Design</span>
+              <span class="sidebar-tag">UX Design</span>
+              <span class="sidebar-tag">Data Visualisation</span>
+              <span class="sidebar-tag">Design Systems</span>
+              <span class="sidebar-tag">User Testing</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Report Container Component</span>
+              <span class="sidebar-tag">Filter Pattern</span>
+              <span class="sidebar-tag">Date Component</span>
+              <span class="sidebar-tag">FreeStyle Documentation</span>
+              <span class="sidebar-tag">Usability Testing Report</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

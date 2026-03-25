@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Improving data clarity and interaction at scale through a redesigned data table component. Colin Summers, Design Systems." />
+  <title>Data Table Redesign — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    /* WIP badge */
+    .wip-badge {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      vertical-align: middle;
+      display: inline-block;
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">Component Design <span class="wip-badge">Work in progress</span></span>
+      <h1 class="fade-up fade-up-2">Improving data clarity and<br>interaction <span class="accent-text">at scale</span></h1>
+      <p class="fade-up fade-up-3">
+        The data table is one of the most used components in the product. But it had gaps — missing sticky headers, unclear sorting affordances, confusing expandable rows, and weak support for density-heavy workflows. Fixing it meant building a component that could serve reporting, bulk actions, and index views consistently.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Component Redesign</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">FreeAgent · Cross-product</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">Component Design · Data</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Usability · Density · Interaction</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+          <!-- Table container -->
+          <rect x="60" y="20" width="1080" height="320" rx="10" fill="#111" stroke="#2E2E2E"/>
+          <!-- Sticky header — highlighted -->
+          <rect x="60" y="20" width="1080" height="44" rx="10" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <rect x="60" y="52" width="1080" height="12" fill="#1A1A1A"/>
+          <!-- Header columns -->
+          <rect x="78" y="31" width="14" height="14" rx="3" fill="#1A1A1A" stroke="#F7C948" stroke-width="1"/>
+          <text x="108" y="47" fill="#F7C948" font-family="monospace" font-size="8" font-weight="700">NAME</text>
+          <!-- Sorted column indicator -->
+          <text x="380" y="47" fill="#F7C948" font-family="monospace" font-size="8" font-weight="700">DATE ↑</text>
+          <text x="560" y="47" fill="#555" font-family="monospace" font-size="8" font-weight="700">AMOUNT</text>
+          <text x="740" y="47" fill="#555" font-family="monospace" font-size="8" font-weight="700">STATUS</text>
+          <text x="920" y="47" fill="#555" font-family="monospace" font-size="8" font-weight="700">CATEGORY</text>
+          <!-- Density toggle -->
+          <rect x="1040" y="30" width="82" height="22" rx="4" fill="#111" stroke="#333"/>
+          <rect x="1040" y="30" width="40" height="22" rx="4" fill="#1A1A1A" stroke="#F7C948" stroke-width="0.75"/>
+          <text x="1060" y="45" fill="#F7C948" font-family="monospace" font-size="7" text-anchor="middle">Default</text>
+          <text x="1103" y="45" fill="#444" font-family="monospace" font-size="7" text-anchor="middle">Compact</text>
+          <!-- Row 1 -->
+          <rect x="60" y="64" width="1080" height="36" fill="#0D0D0D"/>
+          <rect x="78" y="74" width="14" height="14" rx="3" fill="#F7C948"/>
+          <text x="108" y="85" fill="#DDD" font-family="monospace" font-size="9">Acme Corporation</text>
+          <text x="370" y="85" fill="#888" font-family="monospace" font-size="9">1 Mar 2025</text>
+          <text x="550" y="85" fill="#CCC" font-family="monospace" font-size="9" font-variant-numeric="tabular-nums">  £12,400.00</text>
+          <rect x="728" y="74" width="64" height="16" rx="8" fill="#1A2A1A" stroke="#2A4A2A"/>
+          <text x="760" y="86" fill="#4CAF50" font-family="monospace" font-size="7" text-anchor="middle">Paid</text>
+          <text x="910" y="85" fill="#666" font-family="monospace" font-size="9">Services</text>
+          <!-- Row 2 - hover state -->
+          <rect x="60" y="100" width="1080" height="36" fill="#141414"/>
+          <rect x="78" y="110" width="14" height="14" rx="3" fill="#1A1A1A" stroke="#333"/>
+          <text x="108" y="121" fill="#DDD" font-family="monospace" font-size="9">Bright Ideas Ltd</text>
+          <text x="370" y="121" fill="#888" font-family="monospace" font-size="9">8 Mar 2025</text>
+          <text x="550" y="121" fill="#CCC" font-family="monospace" font-size="9" font-variant-numeric="tabular-nums">   £3,600.00</text>
+          <rect x="728" y="110" width="64" height="16" rx="8" fill="#2A1A0A" stroke="#4A3A1A"/>
+          <text x="760" y="122" fill="#F7C948" font-family="monospace" font-size="7" text-anchor="middle">Pending</text>
+          <text x="910" y="121" fill="#666" font-family="monospace" font-size="9">Consulting</text>
+          <!-- Expandable row indicator -->
+          <text x="86" y="121" fill="#555" font-family="monospace" font-size="9">▸</text>
+          <!-- Row 3 -->
+          <rect x="60" y="136" width="1080" height="36" fill="#0D0D0D"/>
+          <rect x="78" y="146" width="14" height="14" rx="3" fill="#1A1A1A" stroke="#333"/>
+          <text x="108" y="157" fill="#DDD" font-family="monospace" font-size="9">Clearwater Consulting</text>
+          <text x="370" y="157" fill="#888" font-family="monospace" font-size="9">12 Mar 2025</text>
+          <text x="550" y="157" fill="#CCC" font-family="monospace" font-size="9" font-variant-numeric="tabular-nums">   £8,200.00</text>
+          <rect x="728" y="146" width="64" height="16" rx="8" fill="#1A6BFF" fill-opacity="0.1" stroke="#1A6BFF" stroke-opacity="0.3"/>
+          <text x="760" y="158" fill="#6A9BFF" font-family="monospace" font-size="7" text-anchor="middle">Invoiced</text>
+          <text x="910" y="157" fill="#666" font-family="monospace" font-size="9">Software</text>
+          <!-- Total row -->
+          <rect x="60" y="208" width="1080" height="4" fill="#F7C948" fill-opacity="0.15"/>
+          <line x1="60" y1="208" x2="1140" y2="208" stroke="#F7C948" stroke-width="1.5" stroke-opacity="0.4"/>
+          <rect x="60" y="212" width="1080" height="36" fill="#0F0F0F"/>
+          <text x="108" y="233" fill="#F7C948" font-family="monospace" font-size="9" font-weight="700" opacity="0.9">Total</text>
+          <text x="550" y="233" fill="#F7C948" font-family="monospace" font-size="9" font-weight="700" font-variant-numeric="tabular-nums" opacity="0.9">  £24,200.00</text>
+          <!-- Scroll edge indicator -->
+          <rect x="1100" y="64" width="40" height="184" fill="url(#fade)" rx="0"/>
+          <defs>
+            <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#0A0A0A" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0.8"/>
+            </linearGradient>
+          </defs>
+          <!-- Bottom label -->
+          <text x="60" y="350" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">DATA TABLE REDESIGN · STICKY HEADERS · DENSITY CONTROLS · MONOSPACE · ACCESSIBILITY</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>A table component for sophisticated workflows</h2>
+            <p>
+              The goal was to deliver a redesigned data table component that supports the company's premium product positioning — enhancing data comprehension, improving interaction affordances, and reducing friction in report-heavy and bulk-action workflows.
+            </p>
+            <p>
+              The component needed to work across reports and index views while establishing consistency across all product teams.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>A component with growing gaps</h2>
+            <ul class="challenge-list">
+              <li>Missing critical features: sticky headers, density adjustment, consistent sorting</li>
+              <li>Unclear interaction affordances for expandable rows and horizontal scrolling</li>
+              <li>Multiple links per row creating user confusion about primary actions</li>
+              <li>Weak visual hierarchy for totals and grouped data</li>
+              <li>Product teams lacked capacity to prioritise this work independently</li>
+              <li>Needed to be flexible enough for both reports and index views</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>Built for density, clarity, and control</h2>
+            <ul class="solution-list">
+              <li>Sticky headers for context retention in lengthy tables</li>
+              <li>Density controls supporting standard and compact viewing modes</li>
+              <li>Enhanced sorting indicators with clearer visual feedback</li>
+              <li>Monospace numerals improving alignment and readability</li>
+              <li>Improved expandable row affordance and comprehension</li>
+              <li>Bold total dividers for easier identification of summary rows</li>
+              <li>Scrolling cues via edge indicators on narrow viewports</li>
+              <li>Refined row selection supporting individual and bulk actions</li>
+              <li>Link improvements: underlines on hover only, single primary link per row</li>
+              <li>Responsive and fully accessible with keyboard and screen reader support</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Research, design, test, implement</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>User Research & Audit</h4>
+                  <p>Leveraged prior testing and conducted a product-wide table usage audit to identify the highest-impact improvements.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Design & Prototyping</h4>
+                  <p>Led cross-team redesign with prototypes validating affordance and interaction changes before any engineering investment.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Testing & Validation</h4>
+                  <p>Confirmed hypotheses about link confusion, density preference, and sorting and header improvements through structured usability testing.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Implementation & Documentation</h4>
+                  <p>Team built the component with comprehensive FreeStyle documentation covering usage, accessibility, and interaction guidelines.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Clarity, control, and confidence</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">📌</div>
+                <h4>Sticky Headers</h4>
+                <p>Users retain column context while scrolling through large datasets — a significant improvement for accountants and power users.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🔤</div>
+                <h4>Better Numerical Legibility</h4>
+                <p>Monospace numerals and refined spacing make it easier to align and compare figures across rows.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🎛️</div>
+                <h4>Density Controls</h4>
+                <p>Standard and compact viewing modes give users control over how much data they can process at once.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">✅</div>
+                <h4>Validated by Testing</h4>
+                <p>User testing confirmed improvements to link clarity, sorting affordance, and expandable row comprehension.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>A redesigned table component serving premium users with better data comprehension, clearer interactions, and consistent implementation across the product.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Component Design</span>
+              <span class="sidebar-tag">Interaction Design</span>
+              <span class="sidebar-tag">Data Visualisation</span>
+              <span class="sidebar-tag">Accessibility</span>
+              <span class="sidebar-tag">User Testing</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Data Table Component</span>
+              <span class="sidebar-tag">Interaction Specs</span>
+              <span class="sidebar-tag">Usability Testing Report</span>
+              <span class="sidebar-tag">FreeStyle Documentation</span>
+              <span class="sidebar-tag">Design Tokens</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

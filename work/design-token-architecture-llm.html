@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Re-architecting design token hierarchies so AI systems can interpret, manipulate, and reason about design decisions. Colin Summers." />
+  <title>Design Token Architecture for LLMs — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">AI Architecture</span>
+      <h1 class="fade-up fade-up-2">Design token architecture<br>for <span class="accent-text">LLMs</span></h1>
+      <p class="fade-up fade-up-3">
+        Design tokens are the most machine-legible part of a design system — but most token architectures were designed exclusively for human workflows. Re-architecting token hierarchies with LLM interpretation in mind unlocks a new class of AI capability: systems that can reason about design decisions, not just execute them.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Token Architecture</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">AI · LLM Integration</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">AI Architecture</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Tokens · Semantics · Reasoning</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+
+          <!-- Column dividers -->
+          <line x1="400" y1="30" x2="400" y2="330" stroke="#1E1E1E" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="800" y1="30" x2="800" y2="330" stroke="#1E1E1E" stroke-width="1" stroke-dasharray="4 4"/>
+
+          <!-- Column headers -->
+          <text x="200" y="36" fill="#444" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle" letter-spacing="0.1em">CORE TOKENS</text>
+          <text x="600" y="36" fill="#F7C948" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle" letter-spacing="0.1em">SEMANTIC TOKENS</text>
+          <text x="1000" y="36" fill="#888" font-family="monospace" font-size="10" font-weight="600" text-anchor="middle" letter-spacing="0.1em">LLM LAYER</text>
+
+          <!-- Core token boxes -->
+          <rect x="60" y="60" width="280" height="38" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="84" fill="#555" font-family="monospace" font-size="11">#0A0A0A</text>
+          <rect x="294" y="71" width="14" height="14" rx="3" fill="#0A0A0A" stroke="#333"/>
+
+          <rect x="60" y="112" width="280" height="38" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="136" fill="#555" font-family="monospace" font-size="11">#F7C948</text>
+          <rect x="294" y="123" width="14" height="14" rx="3" fill="#F7C948"/>
+
+          <rect x="60" y="164" width="280" height="38" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="188" fill="#555" font-family="monospace" font-size="11">16px</text>
+          <text x="240" y="188" fill="#444" font-family="monospace" font-size="10">spacing</text>
+
+          <rect x="60" y="216" width="280" height="38" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="240" fill="#555" font-family="monospace" font-size="11">1rem</text>
+          <text x="240" y="240" fill="#444" font-family="monospace" font-size="10">type</text>
+
+          <rect x="60" y="268" width="280" height="38" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="292" fill="#555" font-family="monospace" font-size="11">0.25rem</text>
+          <text x="240" y="292" fill="#444" font-family="monospace" font-size="10">radius</text>
+
+          <!-- Arrows core → semantic -->
+          <line x1="340" y1="79" x2="430" y2="100" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="340" y1="131" x2="430" y2="148" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="340" y1="183" x2="430" y2="196" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="340" y1="235" x2="430" y2="244" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="340" y1="287" x2="430" y2="292" stroke="#2E2E2E" stroke-width="1.5"/>
+
+          <!-- Semantic token boxes — highlighted in accent -->
+          <rect x="430" y="78" width="300" height="38" rx="6" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="450" y="102" fill="#F7C948" font-family="monospace" font-size="11">color.background.base</text>
+
+          <rect x="430" y="128" width="300" height="38" rx="6" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="450" y="152" fill="#F7C948" font-family="monospace" font-size="11">color.accent.primary</text>
+
+          <rect x="430" y="178" width="300" height="38" rx="6" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="450" y="202" fill="#F7C948" font-family="monospace" font-size="11">spacing.component.md</text>
+
+          <rect x="430" y="228" width="300" height="38" rx="6" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="450" y="252" fill="#F7C948" font-family="monospace" font-size="11">typography.body.base</text>
+
+          <rect x="430" y="278" width="300" height="38" rx="6" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="450" y="302" fill="#F7C948" font-family="monospace" font-size="11">radius.surface.sm</text>
+
+          <!-- Arrows semantic → LLM layer -->
+          <line x1="730" y1="97" x2="820" y2="140" stroke="#F7C948" stroke-width="1.5" opacity="0.4"/>
+          <line x1="730" y1="147" x2="820" y2="180" stroke="#F7C948" stroke-width="1.5" opacity="0.4"/>
+          <line x1="730" y1="197" x2="820" y2="220" stroke="#F7C948" stroke-width="1.5" opacity="0.4"/>
+          <line x1="730" y1="247" x2="820" y2="260" stroke="#F7C948" stroke-width="1.5" opacity="0.4"/>
+          <line x1="730" y1="297" x2="820" y2="280" stroke="#F7C948" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- LLM processing node -->
+          <rect x="820" y="100" width="200" height="160" rx="12" fill="#1A1A1A" stroke="#333"/>
+          <text x="920" y="140" fill="#888" font-family="monospace" font-size="11" text-anchor="middle">LLM</text>
+          <text x="920" y="158" fill="#555" font-family="monospace" font-size="9" text-anchor="middle">processing layer</text>
+          <!-- Inner dots to suggest activity -->
+          <circle cx="880" cy="180" r="3" fill="#F7C948" opacity="0.5"/>
+          <circle cx="920" cy="190" r="3" fill="#F7C948" opacity="0.3"/>
+          <circle cx="960" cy="175" r="3" fill="#F7C948" opacity="0.5"/>
+          <circle cx="900" cy="200" r="2" fill="#555"/>
+          <circle cx="940" cy="208" r="2" fill="#555"/>
+          <line x1="880" y1="180" x2="920" y2="190" stroke="#F7C948" stroke-width="1" opacity="0.2"/>
+          <line x1="920" y1="190" x2="960" y2="175" stroke="#F7C948" stroke-width="1" opacity="0.2"/>
+
+          <!-- Output arrows and labels -->
+          <line x1="1020" y1="145" x2="1090" y2="120" stroke="#F7C948" stroke-width="1.5" opacity="0.6"/>
+          <line x1="1020" y1="180" x2="1090" y2="180" stroke="#F7C948" stroke-width="1.5" opacity="0.6"/>
+          <line x1="1020" y1="215" x2="1090" y2="240" stroke="#F7C948" stroke-width="1.5" opacity="0.6"/>
+
+          <!-- Output labels -->
+          <text x="1095" y="124" fill="#F7C948" font-family="monospace" font-size="12" font-weight="600">Reason</text>
+          <text x="1095" y="184" fill="#F7C948" font-family="monospace" font-size="12" font-weight="600">Generate</text>
+          <text x="1095" y="244" fill="#F7C948" font-family="monospace" font-size="12" font-weight="600">Validate</text>
+
+          <!-- Arrowheads -->
+          <polygon points="1090,116 1098,120 1090,124" fill="#F7C948" opacity="0.6"/>
+          <polygon points="1090,176 1098,180 1090,184" fill="#F7C948" opacity="0.6"/>
+          <polygon points="1090,236 1098,240 1090,244" fill="#F7C948" opacity="0.6"/>
+
+          <!-- Bottom label -->
+          <text x="40" y="344" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">TOKEN ARCHITECTURE · SEMANTIC LAYER · LLM REASONING · DESIGN SYSTEM</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>Tokens as a shared language between humans and AI</h2>
+            <p>
+              The goal was to re-architect token hierarchies so that LLMs could reliably interpret design intent — not just token values — enabling AI tools to reason about visual relationships, generate contextually correct UI, and validate design decisions against system rules.
+            </p>
+            <p>
+              This built directly on the existing three-tier token architecture (core → semantic → component) but extended it with a new layer of machine-readable context.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>Tokens weren't designed for AI reasoning</h2>
+            <ul class="challenge-list">
+              <li>Semantic token names carried implicit human meaning that LLMs couldn't reliably infer</li>
+              <li>No formal relationships between tokens — LLMs couldn't understand which tokens were related or why</li>
+              <li>Token documentation existed as prose, not structured data LLMs could query or reason over</li>
+              <li>AI tools defaulted to hardcoded values when token names were ambiguous, breaking the system</li>
+              <li>No mechanism for LLMs to validate generated token usage against system intent</li>
+              <li>Token hierarchies designed for CSS cascade, not for AI traversal or reasoning</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>A token layer built for machine reasoning</h2>
+            <ul class="solution-list">
+              <li>Extended semantic tokens with structured intent descriptors — machine-readable annotations explaining purpose, relationships, and constraints</li>
+              <li>Formalised token relationship graphs connecting related tokens across tiers and categories</li>
+              <li>Created a token manifest: a structured, queryable document of all tokens, their values, intent, and usage rules</li>
+              <li>Developed token validation rules LLMs can reference to check generated token usage for correctness</li>
+              <li>Built a token-to-component mapping layer so LLMs understand which tokens belong to which components</li>
+              <li>Defined a simplified token vocabulary for AI context windows — optimised for prompt length and reasoning accuracy</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Extending the existing architecture</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Token Audit Through an AI Lens</h4>
+                  <p>Re-examined the existing three-tier token architecture to identify where LLMs were failing to interpret intent correctly — focusing on ambiguous names, missing relationships, and undocumented constraints.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Intent Annotation Schema</h4>
+                  <p>Designed a lightweight annotation schema for semantic tokens — adding purpose, usage context, and constraint fields without disrupting existing token workflows.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Token Manifest</h4>
+                  <p>Built a machine-readable token manifest in structured JSON, covering all tokens with values, tier, category, intent, and relationship data.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>LLM Testing</h4>
+                  <p>Ran iterative tests measuring how accurately LLMs could apply tokens in generated UI with and without the new manifest and annotations — tracking error rates and token hallucination.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <h4>Integration & Documentation</h4>
+                  <p>Integrated the manifest into AI tooling workflows and published guidance on FreeStyle for teams using AI assistants with the design system.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Tokens that AI can reason about</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">🎯</div>
+                <h4>Reduced Token Hallucination</h4>
+                <p>Structured intent annotations and the token manifest significantly reduced cases where AI tools invented token names or defaulted to hardcoded values.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🧠</div>
+                <h4>AI That Understands Intent</h4>
+                <p>LLMs could reason about visual relationships and design decisions — not just apply values — enabling more sophisticated AI-assisted UI generation.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">📊</div>
+                <h4>Queryable Token Knowledge</h4>
+                <p>The token manifest gave AI tools a reliable, structured source of truth — queryable at generation time for any token's purpose, value, or constraints.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🔗</div>
+                <h4>Design–Code Coherence</h4>
+                <p>Token-to-component mappings ensured AI-generated code referenced the right tokens in the right contexts, maintaining system integrity.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>A token architecture that AI can read, reason about, and build with — extending the design system's value into the AI-assisted development workflow.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Token Architecture</span>
+              <span class="sidebar-tag">AI Architecture</span>
+              <span class="sidebar-tag">Design Systems</span>
+              <span class="sidebar-tag">Prompt Engineering</span>
+              <span class="sidebar-tag">Engineering Collaboration</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Token Manifest (JSON)</span>
+              <span class="sidebar-tag">Intent Annotation Schema</span>
+              <span class="sidebar-tag">Token Relationship Graph</span>
+              <span class="sidebar-tag">Validation Rules</span>
+              <span class="sidebar-tag">FreeStyle AI Documentation</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

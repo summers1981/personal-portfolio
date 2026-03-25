@@ -2,7 +2,7 @@
    COLIN SUMMERS — Design Architect for AI/LLMs
    ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* 1. VARIABLES & RESET
    ============================================= */
@@ -25,10 +25,10 @@
   --text-muted:   #555;
   --border:       #1E1E1E;
   --border-mid:   #2A2A2A;
-  --font-display: 'Permanent Marker', cursive;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --nav-h:        64px;
-  --max-w:        1120px;
+  --nav-h:        80px;
+  --max-w:        min(92vw, 1400px);
   --gap:          clamp(16px, 3vw, 32px);
   --ease:         cubic-bezier(0.4, 0, 0.2, 1);
   --transition:   0.22s var(--ease);
@@ -37,6 +37,18 @@
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -10%;
+  right: -10%;
+  width: 70vw;
+  height: 70vw;
+  background: radial-gradient(circle, rgba(247, 201, 72, 0.06) 0%, rgba(247, 201, 72, 0.025) 35%, rgba(247, 201, 72, 0.008) 60%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 body {
@@ -95,9 +107,9 @@ strong { color: var(--text); font-weight: 600; }
 /* 3. LAYOUT
    ============================================= */
 .container {
-  max-width: var(--max-w);
+  width: var(--max-w);
   margin: 0 auto;
-  padding: 0 clamp(20px, 5vw, 60px);
+  padding: 0 clamp(20px, 4vw, 48px);
 }
 
 .section {
@@ -146,13 +158,34 @@ strong { color: var(--text); font-weight: 600; }
 }
 
 .nav-logo {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  color: var(--text);
-  transition: color var(--transition);
+  display: inline-flex;
+  align-items: center;
+  transition: opacity var(--transition);
 }
-.nav-logo:hover { color: var(--accent); }
-.nav-logo .dot { color: var(--accent); }
+.nav-logo:hover { opacity: 0.85; }
+
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border-radius: 8px;
+  transform: rotate(-3deg);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.nav-logo:hover .logo-mark {
+  background: var(--accent);
+  color: var(--bg);
+}
 
 .nav-links {
   display: flex;
@@ -191,7 +224,8 @@ strong { color: var(--text); font-weight: 600; }
   width: 100%;
 }
 
-.nav-cta {
+.nav-cta,
+.nav-links a.nav-cta {
   font-size: 0.8rem;
   font-weight: 600;
   padding: 8px 18px;
@@ -202,7 +236,12 @@ strong { color: var(--text); font-weight: 600; }
   letter-spacing: 0.04em;
 }
 
-.nav-cta:hover {
+.nav-links a.nav-cta::after {
+  display: none;
+}
+
+.nav-cta:hover,
+.nav-links a.nav-cta:hover {
   background: var(--accent);
   color: var(--bg);
 }
@@ -229,13 +268,14 @@ strong { color: var(--text); font-weight: 600; }
 .nav-mobile {
   display: none;
   position: fixed;
-  top: var(--nav-h);
+  top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   background: var(--bg-2);
-  border-bottom: 1px solid var(--border);
-  padding: 20px clamp(20px, 5vw, 60px);
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
   z-index: 99;
 }
@@ -243,15 +283,14 @@ strong { color: var(--text); font-weight: 600; }
 .nav-mobile.open { display: flex; }
 
 .nav-mobile a {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
   color: var(--text-sub);
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  text-align: center;
   transition: color var(--transition);
 }
 
-.nav-mobile a:last-child { border-bottom: none; }
 .nav-mobile a:hover { color: var(--accent); }
 
 /* 5. BUTTONS
@@ -357,6 +396,12 @@ strong { color: var(--text); font-weight: 600; }
   border: 1px solid rgba(52, 211, 153, 0.2);
 }
 
+.tag-experience {
+  background: rgba(251, 146, 60, 0.10);
+  color: #fb923c;
+  border: 1px solid rgba(251, 146, 60, 0.2);
+}
+
 .card h3 {
   margin-bottom: 8px;
   color: var(--text);
@@ -419,10 +464,18 @@ strong { color: var(--text); font-weight: 600; }
   gap: 20px;
 }
 
-.footer-logo {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
+.footer-logo .logo-mark {
+  width: 28px;
+  height: 28px;
+  font-size: 0.68rem;
+  border-radius: 6px;
   color: var(--text-muted);
+  border-color: var(--border-mid);
+  transition: color var(--transition), border-color var(--transition);
+}
+.footer-logo:hover .logo-mark {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .footer-links {
@@ -473,20 +526,13 @@ strong { color: var(--text); font-weight: 600; }
   min-height: 100vh;
   display: grid;
   align-items: center;
-  padding-top: var(--nav-h);
+  padding-top: calc(var(--nav-h) + clamp(48px, 8vw, 80px));
   position: relative;
   overflow: hidden;
 }
 
 .home-hero::before {
-  content: '';
-  position: absolute;
-  top: 20%;
-  right: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(247, 201, 72, 0.05) 0%, transparent 70%);
-  pointer-events: none;
+  display: none;
 }
 
 .hero-badge {
@@ -781,13 +827,14 @@ strong { color: var(--text); font-weight: 600; }
   aspect-ratio: 1;
   max-width: 320px;
   background: var(--bg-3);
-  border: 1px solid var(--border-mid);
+  border: 1px solid rgba(247, 201, 72, 0.25);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 5rem;
   overflow: hidden;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px rgba(247, 201, 72, 0.1);
 }
 
 .avatar-badge {

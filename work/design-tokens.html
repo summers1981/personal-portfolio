@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A unified design language that boosts consistency through a structured token system. Colin Summers, Design Systems." />
+  <title>Design Tokens — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">Design Systems</span>
+      <h1 class="fade-up fade-up-2">A unified design language<br>that boosts <span class="accent-text">consistency</span></h1>
+      <p class="fade-up fade-up-3">
+        With a new brand identity came the opportunity to build a structured, scalable token system from the ground up. The goal was a transparent architecture that served designers and engineers equally — enabling consistency today and theming flexibility tomorrow.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Token Architecture</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">FreeAgent · Rebrand</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">Design Systems</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Tokens · Theming · Consistency</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+          <!-- Tier labels -->
+          <text x="180" y="55" fill="#555" font-family="monospace" font-size="9" text-anchor="middle" font-weight="700">TIER 1 — CORE</text>
+          <text x="600" y="55" fill="#555" font-family="monospace" font-size="9" text-anchor="middle" font-weight="700">TIER 2 — SEMANTIC</text>
+          <text x="1020" y="55" fill="#555" font-family="monospace" font-size="9" text-anchor="middle" font-weight="700">TIER 3 — COMPONENT</text>
+          <!-- Core tokens -->
+          <rect x="60" y="66" width="240" height="36" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <circle cx="84" cy="84" r="8" fill="#1A6BFF"/>
+          <text x="100" y="89" fill="#888" font-family="monospace" font-size="9">blue-50</text>
+          <text x="232" y="89" fill="#555" font-family="monospace" font-size="9">#1A6BFF</text>
+          <rect x="60" y="110" width="240" height="36" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <circle cx="84" cy="128" r="8" fill="#F7C948"/>
+          <text x="100" y="133" fill="#888" font-family="monospace" font-size="9">yellow-40</text>
+          <text x="232" y="133" fill="#555" font-family="monospace" font-size="9">#F7C948</text>
+          <rect x="60" y="154" width="240" height="36" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="100" y="177" fill="#888" font-family="monospace" font-size="9">font-size-400</text>
+          <text x="232" y="177" fill="#555" font-family="monospace" font-size="9">16px</text>
+          <rect x="60" y="198" width="240" height="36" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="100" y="221" fill="#888" font-family="monospace" font-size="9">spacing-200</text>
+          <text x="232" y="221" fill="#555" font-family="monospace" font-size="9">8px</text>
+          <!-- Arrows tier 1 to 2 -->
+          <line x1="300" y1="140" x2="480" y2="140" stroke="#2E2E2E" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <polygon points="480,136 488,140 480,144" fill="#F7C948" opacity="0.6"/>
+          <!-- Semantic tokens -->
+          <rect x="490" y="66" width="220" height="36" rx="6" fill="#111" stroke="#F7C948" stroke-width="1"/>
+          <text x="510" y="89" fill="#F7C948" font-family="monospace" font-size="8">color-background-primary</text>
+          <rect x="490" y="110" width="220" height="36" rx="6" fill="#111" stroke="#F7C948" stroke-width="1"/>
+          <text x="510" y="133" fill="#F7C948" font-family="monospace" font-size="8">color-interactive-default</text>
+          <rect x="490" y="154" width="220" height="36" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="510" y="177" fill="#888" font-family="monospace" font-size="8">font-heading-large</text>
+          <rect x="490" y="198" width="220" height="36" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="510" y="221" fill="#888" font-family="monospace" font-size="8">spacing-component-gap</text>
+          <!-- Arrows tier 2 to 3 -->
+          <line x1="710" y1="140" x2="890" y2="140" stroke="#2E2E2E" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <polygon points="890,136 898,140 890,144" fill="#F7C948" opacity="0.6"/>
+          <!-- Component tokens -->
+          <rect x="900" y="66" width="240" height="36" rx="6" fill="#1A1A1A" stroke="#2E2E2E"/>
+          <text x="920" y="89" fill="#666" font-family="monospace" font-size="8">button-bg-primary</text>
+          <rect x="900" y="110" width="240" height="36" rx="6" fill="#1A1A1A" stroke="#2E2E2E"/>
+          <text x="920" y="133" fill="#666" font-family="monospace" font-size="8">button-text-primary</text>
+          <rect x="900" y="154" width="240" height="36" rx="6" fill="#1A1A1A" stroke="#2E2E2E"/>
+          <text x="920" y="177" fill="#666" font-family="monospace" font-size="8">input-border-default</text>
+          <rect x="900" y="198" width="240" height="36" rx="6" fill="#1A1A1A" stroke="#2E2E2E"/>
+          <text x="920" y="221" fill="#666" font-family="monospace" font-size="8">card-padding-default</text>
+          <!-- Bottom category labels -->
+          <rect x="60" y="260" width="60" height="22" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="90" y="275" fill="#555" font-family="monospace" font-size="7" text-anchor="middle">Colour</text>
+          <rect x="130" y="260" width="72" height="22" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="166" y="275" fill="#555" font-family="monospace" font-size="7" text-anchor="middle">Typography</text>
+          <rect x="212" y="260" width="60" height="22" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="242" y="275" fill="#555" font-family="monospace" font-size="7" text-anchor="middle">Spacing</text>
+          <rect x="490" y="260" width="60" height="22" rx="4" fill="#F7C948" fill-opacity="0.1" stroke="#F7C948" stroke-width="0.75"/>
+          <text x="520" y="275" fill="#F7C948" font-family="monospace" font-size="7" text-anchor="middle" opacity="0.8">Border</text>
+          <rect x="560" y="260" width="60" height="22" rx="4" fill="#F7C948" fill-opacity="0.1" stroke="#F7C948" stroke-width="0.75"/>
+          <text x="590" y="275" fill="#F7C948" font-family="monospace" font-size="7" text-anchor="middle" opacity="0.8">Radius</text>
+          <rect x="630" y="260" width="60" height="22" rx="4" fill="#F7C948" fill-opacity="0.1" stroke="#F7C948" stroke-width="0.75"/>
+          <text x="660" y="275" fill="#F7C948" font-family="monospace" font-size="7" text-anchor="middle" opacity="0.8">Shadow</text>
+          <!-- Bottom label -->
+          <text x="40" y="344" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">DESIGN TOKENS · THREE-TIER ARCHITECTURE · THEMING · FREEAGENT REBRAND</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>Structured tokens for a new design language</h2>
+            <p>
+              The objective was to create a structured, scalable, and brand-aligned token system reflecting a new identity while enabling consistency, flexibility, and theming across products and platforms.
+            </p>
+            <p>
+              This meant solving immediate styling needs while laying infrastructure for future requirements — dark mode, accessibility themes, or AI-driven experiences.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>No system, no shared language</h2>
+            <ul class="challenge-list">
+              <li>No existing token system — complete lack of clarity regarding token purposes and roles</li>
+              <li>Designers lacked a shared semantic language for spacing, colour, or typography</li>
+              <li>No distinction between core values and semantic roles, making scalability impossible</li>
+              <li>Limited engineering visibility into design decisions, creating friction during handoffs</li>
+              <li>New brand identity needed to be reflected consistently across every product surface</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>A three-tier architecture built to last</h2>
+            <p>We designed a transparent three-tier token system that gave every value a clear purpose and consistent name.</p>
+            <ul class="solution-list">
+              <li>Core Tokens: raw values (hex codes, font stacks, pixel measurements) defining the base design language — e.g. <code>blue-50</code>, <code>font-size-400</code>, <code>spacing-200</code></li>
+              <li>Semantic Tokens: purpose-driven styles with meaningful intent — e.g. <code>color-background-primary</code>, <code>font-heading-large</code></li>
+              <li>Component Tokens: an optional layer within components allowing targeted overrides where specific treatment is needed</li>
+              <li>Consistent naming conventions across colour, typography, spacing, border, radius, and shadow categories</li>
+              <li>Tokens aligned with CSS layers in collaboration with engineering — shared naming, shared language</li>
+              <li>Full tokenisation of the Figma UI Kit, replacing hardcoded styles with semantic tokens</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>From audit to adoption</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Token Audit</h4>
+                  <p>Translated brand foundations into token values, reviewing palette changes, typography updates, and spacing scales in collaboration with brand partners.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Architecture Design</h4>
+                  <p>Created clear variable structures aligned to token tiers with consistent naming and logical grouping supporting Figma variable modes and collections.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Engineering Alignment</h4>
+                  <p>Collaborated with engineering to validate token names and structures against CSS token layers, ensuring design and code spoke the same language.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>UI Kit Tokenisation</h4>
+                  <p>Replaced all hardcoded styles in the Figma UI Kit with tokens, adding semantic labels to enable component theming and global updates.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <h4>Documentation & Rollout</h4>
+                  <p>Created Notion templates, published FreeStyle guidance, and ran working sessions for designer and engineer onboarding.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Consistency cascading across the product</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">🎨</div>
+                <h4>Brand Alignment</h4>
+                <p>Design tokens consistently reflect the new identity across all product surfaces — a single update propagates everywhere.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🌗</div>
+                <h4>Theming Foundation</h4>
+                <p>The architecture supports future needs including dark mode, accessibility themes, and potential product-level branding.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">⚡</div>
+                <h4>Increased Velocity</h4>
+                <p>Global token changes — like updating spacing or colours — now cascade through the system and products automatically.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🤝</div>
+                <h4>Improved Collaboration</h4>
+                <p>Shared naming and clearer intent reduced design-development friction, with token purpose and values accessible directly from the system.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>Brand experience consistency achieved across all touchpoints — with a token architecture that supports theming, accessibility, and future product requirements.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Design Systems</span>
+              <span class="sidebar-tag">Token Architecture</span>
+              <span class="sidebar-tag">Design Tokens</span>
+              <span class="sidebar-tag">Figma Variables</span>
+              <span class="sidebar-tag">Engineering Collaboration</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Three-Tier Token System</span>
+              <span class="sidebar-tag">Figma Variable Collections</span>
+              <span class="sidebar-tag">FreeStyle Documentation</span>
+              <span class="sidebar-tag">Naming Conventions</span>
+              <span class="sidebar-tag">UI Kit Tokenisation</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

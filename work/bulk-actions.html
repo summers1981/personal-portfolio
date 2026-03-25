@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Increasing user efficiency and speed at scale with a reusable bulk action pattern. Colin Summers, Design Systems." />
+  <title>Bulk Actions Pattern — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">Pattern Design</span>
+      <h1 class="fade-up fade-up-2">Increasing user efficiency<br>and speed <span class="accent-text">at scale</span></h1>
+      <p class="fade-up fade-up-3">
+        As the product matured and scaled to serve larger customers, existing bulk task patterns fell short. Users were managing more data and expecting sophisticated controls, but the UI hadn't kept pace. Multiple teams were planning to build their own versions — creating the risk of fragmentation at scale.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Pattern Design</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">FreeAgent · Cross-team</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">Interaction Design</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Efficiency · Scalability · Consistency</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+          <!-- Table container -->
+          <rect x="100" y="30" width="1000" height="300" rx="10" fill="#111" stroke="#2E2E2E"/>
+          <!-- Table header -->
+          <rect x="100" y="30" width="1000" height="40" rx="10" fill="#1A1A1A" stroke="#2E2E2E"/>
+          <rect x="100" y="58" width="1000" height="12" fill="#1A1A1A"/>
+          <text x="148" y="55" fill="#555" font-family="monospace" font-size="9">Name</text>
+          <text x="380" y="55" fill="#555" font-family="monospace" font-size="9">Date</text>
+          <text x="580" y="55" fill="#555" font-family="monospace" font-size="9">Amount</text>
+          <text x="780" y="55" fill="#555" font-family="monospace" font-size="9">Status</text>
+          <!-- Checkboxes -->
+          <rect x="118" y="41" width="14" height="14" rx="3" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <!-- Row 1 - selected -->
+          <rect x="100" y="70" width="1000" height="36" fill="#F7C948" fill-opacity="0.06" stroke="#F7C948" stroke-width="0.5" stroke-dasharray="0"/>
+          <rect x="118" y="80" width="14" height="14" rx="3" fill="#F7C948"/>
+          <text x="144" y="91" fill="#CCC" font-family="monospace" font-size="9">Acme Corp Invoice #1042</text>
+          <text x="370" y="91" fill="#888" font-family="monospace" font-size="9">12 Mar 2025</text>
+          <text x="570" y="91" fill="#888" font-family="monospace" font-size="9">£2,400.00</text>
+          <rect x="768" y="80" width="56" height="16" rx="8" fill="#1A1A1A" stroke="#333"/>
+          <text x="796" y="92" fill="#888" font-family="monospace" font-size="7" text-anchor="middle">Pending</text>
+          <!-- Row 2 - selected -->
+          <rect x="100" y="106" width="1000" height="36" fill="#F7C948" fill-opacity="0.06"/>
+          <rect x="118" y="116" width="14" height="14" rx="3" fill="#F7C948"/>
+          <text x="144" y="127" fill="#CCC" font-family="monospace" font-size="9">Bright Ideas Ltd Invoice #887</text>
+          <text x="370" y="127" fill="#888" font-family="monospace" font-size="9">10 Mar 2025</text>
+          <text x="570" y="127" fill="#888" font-family="monospace" font-size="9">£960.00</text>
+          <rect x="768" y="116" width="56" height="16" rx="8" fill="#1A1A1A" stroke="#333"/>
+          <text x="796" y="128" fill="#888" font-family="monospace" font-size="7" text-anchor="middle">Pending</text>
+          <!-- Row 3 - unselected -->
+          <rect x="118" y="152" width="14" height="14" rx="3" fill="#1A1A1A" stroke="#333"/>
+          <text x="144" y="163" fill="#666" font-family="monospace" font-size="9">Clearwater Consulting #234</text>
+          <text x="370" y="163" fill="#555" font-family="monospace" font-size="9">8 Mar 2025</text>
+          <text x="570" y="163" fill="#555" font-family="monospace" font-size="9">£1,200.00</text>
+          <!-- Row 4 - unselected -->
+          <rect x="118" y="188" width="14" height="14" rx="3" fill="#1A1A1A" stroke="#333"/>
+          <text x="144" y="199" fill="#666" font-family="monospace" font-size="9">Delta Systems Invoice #091</text>
+          <text x="370" y="199" fill="#555" font-family="monospace" font-size="9">5 Mar 2025</text>
+          <text x="570" y="199" fill="#555" font-family="monospace" font-size="9">£3,750.00</text>
+          <!-- Bulk action toolbar floating above -->
+          <rect x="300" y="238" width="600" height="52" rx="10" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="330" y="268" fill="#F7C948" font-family="monospace" font-size="9" font-weight="700">2 selected</text>
+          <rect x="440" y="250" width="80" height="28" rx="6" fill="#F7C948"/>
+          <text x="480" y="268" fill="#0A0A0A" font-family="monospace" font-size="9" text-anchor="middle" font-weight="700">Send</text>
+          <rect x="530" y="250" width="80" height="28" rx="6" fill="#222" stroke="#333"/>
+          <text x="570" y="268" fill="#888" font-family="monospace" font-size="9" text-anchor="middle">Archive</text>
+          <rect x="620" y="250" width="80" height="28" rx="6" fill="#222" stroke="#333"/>
+          <text x="660" y="268" fill="#888" font-family="monospace" font-size="9" text-anchor="middle">Delete</text>
+          <text x="840" y="268" fill="#555" font-family="monospace" font-size="9">More ▾</text>
+          <!-- Bottom label -->
+          <text x="100" y="350" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">BULK ACTIONS PATTERN · CROSS-TEAM · EFFICIENCY · SCALABILITY · CONSISTENCY</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>One pattern to serve every team</h2>
+            <p>
+              The goal was to design and deliver a consistent, efficient, and flexible bulk action pattern capable of managing large datasets across complex workflows — bringing clarity and consistency to fragmented product experiences.
+            </p>
+            <p>
+              Critically, the solution needed to support future bulk features without requiring rework, and to strengthen strategic alignment around scaling premium experiences.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>Fragmentation waiting to happen</h2>
+            <ul class="challenge-list">
+              <li>No existing pattern guidance for bulk actions outside outdated legacy implementations</li>
+              <li>Multiple teams planning independent versions, creating high risk of inconsistency</li>
+              <li>Legacy banking pattern causing real user friction in everyday workflows</li>
+              <li>Pattern needed flexibility across diverse use cases — from simple deletions to complex configurations</li>
+              <li>Solution required intuitive design for easy rollout and maintenance at scale</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>A dynamic, contextual bulk action toolbar</h2>
+            <p>A new bulk action toolbar — persistent, contextual, and designed to scale across every use case in the product.</p>
+            <ul class="solution-list">
+              <li>Dynamic toolbar appearing upon multi-item selection in table views</li>
+              <li>Contextual actions — single or multiple, inline or dropdown — adapted per use case</li>
+              <li>Scrolling toolbar maintaining action visibility across large datasets</li>
+              <li>Clear dismissal behavior minimising disruption to the main workflow</li>
+              <li>Modal and confirmation flow support for configuration-heavy actions</li>
+              <li>Fully documented on FreeStyle with usage rules, interaction details, and accessibility guidance</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Cross-team, tested, and rolled out</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Audit & Alignment</h4>
+                  <p>Conducted a cross-product audit of existing bulk actions, including legacy patterns, one-off implementations, and future team requests.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Collaborative Design</h4>
+                  <p>Led design working with designers, engineers, and PMs across multiple teams. Pattern intentionally scaled up and down per use case.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>User Testing</h4>
+                  <p>Usability testing with diverse users showed strong discoverability. Scroll behavior and dynamic visibility described as 'smart and responsive'.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Rollout & Documentation</h4>
+                  <p>Coordinated phased rollout with cross-functional teams. Pattern fully documented on FreeStyle with clear usage rules and accessibility guidance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Efficiency gains across the product</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">⚡</div>
+                <h4>Faster User Workflows</h4>
+                <p>Users perform repetitive bulk tasks significantly more efficiently — with measurable time savings on sending, deleting, and configuring multiple items.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🔁</div>
+                <h4>Faster Team Deployment</h4>
+                <p>Pattern reuse across features saved teams significant design and development time — eliminating the need to design from scratch.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🎯</div>
+                <h4>Higher Consistency</h4>
+                <p>A single shared pattern eliminated fragmented team implementations, delivering a consistent experience regardless of context.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">📐</div>
+                <h4>Scalable Foundation</h4>
+                <p>The flexible architecture supports future bulk interaction needs without requiring redesign — a lasting investment in the product.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>Customer experience consistency and quality at scale — with a reusable, documented pattern that reduced overhead for every team that shipped it.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Interaction Design</span>
+              <span class="sidebar-tag">UX Design</span>
+              <span class="sidebar-tag">Systems Design</span>
+              <span class="sidebar-tag">Pattern Design</span>
+              <span class="sidebar-tag">User Testing</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Bulk Action Toolbar Component</span>
+              <span class="sidebar-tag">Interaction Specs</span>
+              <span class="sidebar-tag">User Testing Report</span>
+              <span class="sidebar-tag">FreeStyle Documentation</span>
+              <span class="sidebar-tag">Rollout Coordination</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

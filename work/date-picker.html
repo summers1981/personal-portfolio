@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Modernising and speeding up date selection across 166 instances. Colin Summers, Design Systems." />
+  <title>Date Picker Modernisation — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">Component Design</span>
+      <h1 class="fade-up fade-up-2">Modernising and speeding up<br><span class="accent-text">date selection</span></h1>
+      <p class="fade-up fade-up-3">
+        Date pickers seem simple, but they're not. Ours had long been a point of friction for users — outdated styling, clunky behavior, and limited flexibility. With 166 instances across the product, reimagining the experience was both high-impact and high-stakes.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">Component Redesign</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">FreeAgent · 166 instances</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">Design Systems · Accessibility</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">UX · Interaction · Speed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+          <!-- Input field -->
+          <rect x="440" y="30" width="320" height="40" rx="6" fill="#111" stroke="#2E2E2E"/>
+          <text x="460" y="55" fill="#888" font-family="monospace" font-size="10">15 March 2025</text>
+          <text x="720" y="55" fill="#555" font-family="monospace" font-size="10">📅</text>
+          <!-- Calendar panel -->
+          <rect x="380" y="80" width="440" height="250" rx="10" fill="#111" stroke="#F7C948" stroke-width="1.5"/>
+          <!-- Month header -->
+          <rect x="380" y="80" width="440" height="44" rx="10" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <rect x="380" y="110" width="440" height="14" fill="#1A1A1A"/>
+          <text x="600" y="107" fill="#EEE" font-family="monospace" font-size="11" text-anchor="middle" font-weight="700">March 2025</text>
+          <!-- Prev/next nav -->
+          <text x="410" y="107" fill="#F7C948" font-family="monospace" font-size="12" text-anchor="middle">‹</text>
+          <text x="790" y="107" fill="#F7C948" font-family="monospace" font-size="12" text-anchor="middle">›</text>
+          <!-- Day headers -->
+          <text x="420" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Mo</text>
+          <text x="480" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Tu</text>
+          <text x="540" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">We</text>
+          <text x="600" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Th</text>
+          <text x="660" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Fr</text>
+          <text x="720" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Sa</text>
+          <text x="780" y="142" fill="#555" font-family="monospace" font-size="8" text-anchor="middle">Su</text>
+          <!-- Row 1 -->
+          <text x="660" y="168" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">1</text>
+          <text x="720" y="168" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">2</text>
+          <text x="780" y="168" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">3</text>
+          <!-- Row 2 -->
+          <text x="420" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">4</text>
+          <text x="480" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">5</text>
+          <text x="540" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">6</text>
+          <text x="600" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">7</text>
+          <text x="660" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">8</text>
+          <text x="720" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">9</text>
+          <text x="780" y="194" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">10</text>
+          <!-- Row 3 -->
+          <text x="420" y="220" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">11</text>
+          <text x="480" y="220" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">12</text>
+          <text x="540" y="220" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">13</text>
+          <text x="600" y="220" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">14</text>
+          <!-- Selected date -->
+          <circle cx="660" cy="215" r="14" fill="#F7C948"/>
+          <text x="660" y="220" fill="#0A0A0A" font-family="monospace" font-size="9" text-anchor="middle" font-weight="700">15</text>
+          <text x="720" y="220" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">16</text>
+          <text x="780" y="220" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">17</text>
+          <!-- Row 4 -->
+          <text x="420" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">18</text>
+          <text x="480" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">19</text>
+          <text x="540" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">20</text>
+          <text x="600" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">21</text>
+          <text x="660" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">22</text>
+          <text x="720" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">23</text>
+          <text x="780" y="246" fill="#777" font-family="monospace" font-size="9" text-anchor="middle">24</text>
+          <!-- Keyboard indicator -->
+          <rect x="510" y="298" width="64" height="20" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="542" y="313" fill="#555" font-family="monospace" font-size="7" text-anchor="middle">Tab ↹</text>
+          <rect x="584" y="298" width="64" height="20" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="616" y="313" fill="#555" font-family="monospace" font-size="7" text-anchor="middle">↑ ↓ ← →</text>
+          <rect x="658" y="298" width="64" height="20" rx="4" fill="#1A1A1A" stroke="#333"/>
+          <text x="690" y="313" fill="#555" font-family="monospace" font-size="7" text-anchor="middle">Enter ↵</text>
+          <!-- Bottom label -->
+          <text x="40" y="350" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">DATE PICKER MODERNISATION · 166 INSTANCES · ACCESSIBILITY · INTERACTION DESIGN</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>Replace friction with clarity and speed</h2>
+            <p>
+              The goal was to replace an outdated third-party date picker with a custom component that was visually aligned with our brand, faster and more intuitive to use, and fully accessible.
+            </p>
+            <p>
+              This needed to serve both everyday users and power users like accountants who work with dates constantly — getting it right meant reducing friction across the entire product.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>A component that was holding users back</h2>
+            <ul class="challenge-list">
+              <li>Disconnected visual appearance from the rest of the UI</li>
+              <li>No quick navigation between distant months or years</li>
+              <li>Rigid input field with poor error tolerance and minimal guidance</li>
+              <li>Poor accessibility for keyboard and screen reader users</li>
+              <li>Needed to serve both basic and power users with different input preferences</li>
+              <li>166 instances across the product meant any improvement would have wide impact</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>Custom-built, accessible, and flexible</h2>
+            <ul class="solution-list">
+              <li>Modern, on-brand design aligned with the full design language</li>
+              <li>Button selectors enabling faster month and year navigation</li>
+              <li>Forgiving text input supporting multiple pre-selected date formats</li>
+              <li>Complete keyboard navigation and screen reader support</li>
+              <li>Technology updates improving long-term maintainability</li>
+              <li>Comprehensive documentation published on the FreeStyle reference site</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Research-led, tested with real users</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Benchmarking & Research</h4>
+                  <p>Audited the existing component against industry design systems, identifying pain points in format handling, navigation friction, and accessibility gaps.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Cross-Functional Design</h4>
+                  <p>Collaborated with design system engineers and designers to develop solutions addressing both UI and systems-level challenges.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>User Testing & Beta</h4>
+                  <p>Validated concerns through structured testing with real users. Beta feedback confirmed the component was 'cleaner,' 'faster,' and easier to navigate.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Documentation & Rollout</h4>
+                  <p>Released the component in the UI kit and published comprehensive guidelines covering accessibility and formatting on FreeStyle.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>Consistent, accessible, product-wide</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">✨</div>
+                <h4>Modernised Experience</h4>
+                <p>Consistent, on-brand date selection across all 166 instances — bringing the component in line with the rest of the product.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">⌨️</div>
+                <h4>Full Accessibility</h4>
+                <p>Complete keyboard navigation and screen reader support delivered for the first time, meeting accessibility standards across the product.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">⚡</div>
+                <h4>Faster Date Navigation</h4>
+                <p>Reduced interaction time for long-range date selections — particularly valuable for accountants and power users.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🎯</div>
+                <h4>Eliminated Formatting Friction</h4>
+                <p>Forgiving text input accepted multiple formats, removing a significant source of user error and frustration.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>Delivered a consistent, accessible, and faster date selection experience across 166 product instances — improving quality at scale for every type of user.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Component Design</span>
+              <span class="sidebar-tag">Accessibility</span>
+              <span class="sidebar-tag">UX Design</span>
+              <span class="sidebar-tag">Design Systems</span>
+              <span class="sidebar-tag">User Testing</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Date Picker Component</span>
+              <span class="sidebar-tag">Figma UI Kit Update</span>
+              <span class="sidebar-tag">FreeStyle Documentation</span>
+              <span class="sidebar-tag">Interaction Specs</span>
+              <span class="sidebar-tag">Accessibility Guidelines</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

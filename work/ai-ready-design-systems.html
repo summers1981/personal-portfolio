@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Architecting design system principles that translate to LLM-readable structures — making design decisions machine-legible. Colin Summers." />
+  <title>AI-Ready Design Systems — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Project page layout */
+    .project-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .project-meta-item:last-child {
+      border-right: none;
+    }
+
+    .project-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Hero illustration */
+    .project-visual {
+      width: 100%;
+      height: clamp(200px, 30vw, 360px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: clamp(48px, 8vw, 80px);
+    }
+
+    /* Content layout */
+    .project-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+
+    .project-body h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .project-body p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .project-section {
+      padding-bottom: clamp(40px, 6vw, 60px);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(40px, 6vw, 60px);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    /* Challenge list */
+    .challenge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .challenge-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .challenge-list li::before {
+      content: '–';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Solution list */
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .solution-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    .solution-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Process steps */
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Outcome cards */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .outcome-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color var(--transition);
+    }
+
+    .outcome-card:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+    }
+
+    .outcome-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .outcome-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .outcome-card p {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* Sidebar */
+    .project-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-mid);
+      color: var(--text-sub);
+    }
+
+    .outcome-summary {
+      background: var(--accent-dim);
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .outcome-summary h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .outcome-summary p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      margin-bottom: 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 900px) {
+      .project-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .project-sidebar {
+        position: static;
+      }
+
+      .project-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .outcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta-bar {
+        gap: 20px;
+      }
+
+      .project-meta-item {
+        border-right: none;
+        padding-right: 0;
+      }
+    }
+
+    /* ── INVERTED THEME ── */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .logo-mark {
+      border-color: #0A0A0A;
+      color: #0A0A0A;
+    }
+
+    .nav-logo:hover .logo-mark {
+      background: #0A0A0A;
+      color: #F7C948;
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .accent-text { color: #0A0A0A; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .outcome-summary {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.14);
+    }
+    .outcome-summary h4 { color: #0A0A0A; }
+
+    .step-num {
+      background: rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.14);
+      color: #0A0A0A;
+    }
+
+    .solution-list li::before,
+    .challenge-list li::before { color: #0A0A0A; }
+
+    .outcome-card:hover { border-color: rgba(0,0,0,0.3); }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html" class="active">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../work.html" class="back-link fade-up fade-up-1">Back to work</a>
+      <span class="section-label fade-up fade-up-1">AI Architecture</span>
+      <h1 class="fade-up fade-up-2">Architecting design systems<br>ready for <span class="accent-text">AI</span></h1>
+      <p class="fade-up fade-up-3">
+        As AI tools become embedded in design and engineering workflows, design systems need to do more than serve humans. Tokens, components, and documentation must be structured so that LLMs can read, reason about, and act on them reliably — turning the design system into a machine-legible foundation for AI-assisted product building.
+      </p>
+
+      <div class="project-meta-bar fade-up fade-up-4">
+        <div class="project-meta-item">
+          <span class="project-meta-label">Scope</span>
+          <span class="project-meta-value">AI Systems Strategy</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Context</span>
+          <span class="project-meta-value">Design Systems · LLM Integration</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Category</span>
+          <span class="project-meta-value">AI Architecture</span>
+        </div>
+        <div class="project-meta-item">
+          <span class="project-meta-label">Focus</span>
+          <span class="project-meta-value">Structure · Legibility · Automation</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Hero visual -->
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="1200" height="360" fill="#0A0A0A"/>
+
+          <!-- Left column: design system layers -->
+          <!-- Tokens -->
+          <rect x="60" y="48" width="180" height="44" rx="7" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="75" fill="#888" font-family="monospace" font-size="12" font-weight="600">Tokens</text>
+          <rect x="216" y="62" width="8" height="8" rx="2" fill="#F7C948" opacity="0.6"/>
+
+          <!-- Components -->
+          <rect x="60" y="108" width="180" height="44" rx="7" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="135" fill="#888" font-family="monospace" font-size="12" font-weight="600">Components</text>
+          <rect x="216" y="122" width="8" height="8" rx="2" fill="#F7C948" opacity="0.4"/>
+
+          <!-- Patterns -->
+          <rect x="60" y="168" width="180" height="44" rx="7" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="195" fill="#888" font-family="monospace" font-size="12" font-weight="600">Patterns</text>
+          <rect x="216" y="182" width="8" height="8" rx="2" fill="#F7C948" opacity="0.4"/>
+
+          <!-- Docs -->
+          <rect x="60" y="228" width="180" height="44" rx="7" fill="#111" stroke="#2E2E2E"/>
+          <text x="80" y="255" fill="#888" font-family="monospace" font-size="12" font-weight="600">Docs</text>
+          <rect x="216" y="242" width="8" height="8" rx="2" fill="#F7C948" opacity="0.4"/>
+
+          <!-- Connecting lines from left column to central LLM node -->
+          <line x1="240" y1="70" x2="490" y2="178" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="240" y1="130" x2="490" y2="178" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="240" y1="190" x2="490" y2="178" stroke="#2E2E2E" stroke-width="1.5"/>
+          <line x1="240" y1="250" x2="490" y2="178" stroke="#2E2E2E" stroke-width="1.5"/>
+
+          <!-- Central LLM hexagon -->
+          <!-- Hexagon path centered at 540,180, radius ~90 -->
+          <polygon points="540,100 618,143 618,217 540,260 462,217 462,143" fill="#1A1A1A" stroke="#F7C948" stroke-width="2"/>
+          <text x="540" y="172" fill="#F7C948" font-family="monospace" font-size="18" font-weight="700" text-anchor="middle">LLM</text>
+          <text x="540" y="194" fill="#F7C948" font-family="monospace" font-size="9" text-anchor="middle" opacity="0.6">language model</text>
+
+          <!-- Connecting lines from LLM to right column -->
+          <line x1="618" y1="143" x2="760" y2="110" stroke="#F7C948" stroke-width="1.5" opacity="0.5"/>
+          <line x1="618" y1="180" x2="760" y2="178" stroke="#F7C948" stroke-width="1.5" opacity="0.5"/>
+          <line x1="618" y1="217" x2="760" y2="248" stroke="#F7C948" stroke-width="1.5" opacity="0.5"/>
+
+          <!-- Right column: output nodes -->
+          <!-- Code -->
+          <rect x="760" y="86" width="160" height="48" rx="7" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="840" y="116" fill="#F7C948" font-family="monospace" font-size="13" font-weight="600" text-anchor="middle">Code</text>
+
+          <!-- Design -->
+          <rect x="760" y="154" width="160" height="48" rx="7" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="840" y="184" fill="#F7C948" font-family="monospace" font-size="13" font-weight="600" text-anchor="middle">Design</text>
+
+          <!-- Content -->
+          <rect x="760" y="222" width="160" height="48" rx="7" fill="#1A1A1A" stroke="#F7C948" stroke-width="1.5"/>
+          <text x="840" y="252" fill="#F7C948" font-family="monospace" font-size="13" font-weight="600" text-anchor="middle">Content</text>
+
+          <!-- Scattered node dots for network feel -->
+          <circle cx="360" cy="80" r="3" fill="#2E2E2E"/>
+          <circle cx="400" cy="140" r="3" fill="#2E2E2E"/>
+          <circle cx="380" cy="220" r="3" fill="#2E2E2E"/>
+          <circle cx="350" cy="270" r="3" fill="#2E2E2E"/>
+          <circle cx="680" cy="90" r="3" fill="#F7C948" opacity="0.3"/>
+          <circle cx="710" cy="200" r="3" fill="#F7C948" opacity="0.3"/>
+          <circle cx="690" cy="270" r="3" fill="#F7C948" opacity="0.3"/>
+
+          <!-- Additional faint network lines -->
+          <line x1="360" y1="80" x2="400" y2="140" stroke="#1E1E1E" stroke-width="1"/>
+          <line x1="400" y1="140" x2="380" y2="220" stroke="#1E1E1E" stroke-width="1"/>
+          <line x1="380" y1="220" x2="350" y2="270" stroke="#1E1E1E" stroke-width="1"/>
+          <line x1="680" y1="90" x2="710" y2="200" stroke="#F7C948" stroke-width="1" opacity="0.15"/>
+          <line x1="710" y1="200" x2="690" y2="270" stroke="#F7C948" stroke-width="1" opacity="0.15"/>
+
+          <!-- Bottom label -->
+          <text x="40" y="344" fill="#F7C948" font-family="monospace" font-size="10" opacity="0.4">AI-READY DESIGN SYSTEMS · LLM INTEGRATION · MACHINE-LEGIBLE ARCHITECTURE</text>
+        </svg>
+      </div>
+
+      <!-- Two-col layout -->
+      <div class="project-layout">
+
+        <!-- Main body -->
+        <div class="project-body">
+
+          <!-- Objective -->
+          <div class="project-section">
+            <span class="section-label">Objective</span>
+            <h2>Making design decisions machine-legible</h2>
+            <p>
+              The objective was to evolve the design system's architecture so that AI tools — from coding assistants to generative UI — could reliably interpret, use, and extend it without producing inconsistent or broken output.
+            </p>
+            <p>
+              This meant rethinking how tokens are named and structured, how component documentation is written, and how the system as a whole communicates intent — not just to designers and engineers, but to language models.
+            </p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="project-section">
+            <span class="section-label">Challenges & Goals</span>
+            <h2>Design systems weren't built for machines</h2>
+            <ul class="challenge-list">
+              <li>Token names optimised for human readability but ambiguous to LLMs without semantic context</li>
+              <li>Component documentation written as prose — useful for humans, hard to parse programmatically</li>
+              <li>No structured metadata describing component purpose, constraints, or relationships</li>
+              <li>AI tools hallucinating component names, misapplying tokens, or generating inconsistent UI</li>
+              <li>Lack of machine-readable usage rules meant LLMs couldn't distinguish correct from incorrect use</li>
+              <li>Design system maintenance patterns not designed with AI contribution or generation in mind</li>
+            </ul>
+          </div>
+
+          <!-- Solutions -->
+          <div class="project-section">
+            <span class="section-label">Solutions</span>
+            <h2>Structured for both humans and machines</h2>
+            <ul class="solution-list">
+              <li>Audited token naming conventions and added semantic clarity — purpose-first names that LLMs can interpret without additional context</li>
+              <li>Introduced structured component metadata: purpose, constraints, required props, forbidden combinations, and accessibility requirements</li>
+              <li>Formalised component documentation into consistent schemas that can be parsed programmatically</li>
+              <li>Created prompt-ready system summaries — condensed, structured descriptions of the design system for use in AI context windows</li>
+              <li>Defined contribution guidelines for AI-generated components, including validation rules and review criteria</li>
+              <li>Established a token-to-code mapping layer so LLMs can correctly reference design decisions when generating UI</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="project-section">
+            <span class="section-label">Process</span>
+            <h2>Research, prototype, validate</h2>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Audit & Gap Analysis</h4>
+                  <p>Reviewed the existing design system through the lens of AI legibility — identifying where token names, component docs, and structural patterns would cause LLM misinterpretation.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Schema Design</h4>
+                  <p>Designed structured metadata schemas for components and tokens, balancing human readability with machine parseability.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Prompt Engineering</h4>
+                  <p>Developed and tested system prompt templates that inject design system context into AI coding assistants, measuring output quality and consistency.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h4>Validation with AI Tools</h4>
+                  <p>Ran structured tests with LLM-powered tools to measure how accurately they could reference tokens, instantiate components, and follow usage rules.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <h4>Documentation & Rollout</h4>
+                  <p>Updated FreeStyle with AI-specific guidance, including how to prompt effectively using the design system and what AI-generated output requires human review.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="project-section">
+            <span class="section-label">Results & Impact</span>
+            <h2>A design system that works with AI, not against it</h2>
+            <div class="outcome-grid">
+              <div class="outcome-card">
+                <div class="outcome-icon">🤖</div>
+                <h4>More Reliable AI Output</h4>
+                <p>Structured metadata and semantic token naming measurably reduced hallucinated component names and misapplied tokens in AI-generated UI.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">⚡</div>
+                <h4>Faster AI-Assisted Development</h4>
+                <p>Engineers using AI coding tools could reference design system tokens and components correctly without manual correction or lookup.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">📋</div>
+                <h4>Prompt-Ready Documentation</h4>
+                <p>System prompt templates and condensed system summaries gave teams a consistent, effective way to inject design system context into AI workflows.</p>
+              </div>
+              <div class="outcome-card">
+                <div class="outcome-icon">🔧</div>
+                <h4>Foundation for AI Contribution</h4>
+                <p>Contribution guidelines for AI-generated components gave teams a clear framework for reviewing and accepting machine-generated design work.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="project-sidebar">
+
+          <div class="outcome-summary">
+            <h4>Outcome</h4>
+            <p>A design system restructured to be as useful to AI as it is to designers and engineers — enabling faster, more consistent AI-assisted product building.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Disciplines</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">AI Architecture</span>
+              <span class="sidebar-tag">Design Systems</span>
+              <span class="sidebar-tag">Token Strategy</span>
+              <span class="sidebar-tag">Documentation</span>
+              <span class="sidebar-tag">Prompt Engineering</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h4>Deliverables</h4>
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Component Metadata Schema</span>
+              <span class="sidebar-tag">Semantic Token Conventions</span>
+              <span class="sidebar-tag">Prompt Templates</span>
+              <span class="sidebar-tag">AI Contribution Guidelines</span>
+              <span class="sidebar-tag">FreeStyle Documentation</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip">
+        <h2>Want to talk through this work?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
