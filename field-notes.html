@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Field Notes — short professional writing from the edge of product, design, and AI. Colin Summers." />
+  <title>Field Notes — Colin Summers</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+    }
+
+    .note-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+
+    .note-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-glow);
+    }
+
+    .note-card:hover .note-title {
+      color: var(--accent);
+    }
+
+    .note-card:hover .note-arrow {
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .note-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .note-date {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .note-read-time {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .note-title {
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      transition: color var(--transition);
+    }
+
+    .note-excerpt {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      flex: 1;
+    }
+
+    .note-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .note-arrow {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: color var(--transition), transform var(--transition);
+    }
+
+    @media (max-width: 768px) {
+      .notes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="work.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="field-notes.html" class="active">Field Notes</a>
+        <a href="contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="index.html">Home</a>
+    <a href="work.html">Work</a>
+    <a href="about.html">About</a>
+    <a href="field-notes.html">Field Notes</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-label fade-up fade-up-1">Writing</span>
+      <h1 class="fade-up fade-up-2">Field Notes</h1>
+      <p class="fade-up fade-up-3">
+        Short thoughts from the edge of product, design, and AI — observations made while building at the frontier, not from a safe distance.
+      </p>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="section">
+    <div class="container">
+      <div class="notes-grid fade-up fade-up-1">
+
+        <a href="#" class="note-card">
+          <div class="note-meta">
+            <span class="card-tag tag-ai">AI</span>
+            <span class="note-date">March 2026</span>
+            <span class="note-read-time">· 3 min</span>
+          </div>
+          <h2 class="note-title">Design tokens are the wrong abstraction for AI — and what to use instead</h2>
+          <p class="note-excerpt">Tokens were built for design-to-code pipelines. LLMs reason differently. When an AI encounters a token like <code style="font-family:monospace; font-size:0.82em; color:var(--accent);">color.brand.primary</code>, it has no semantic grip on what that means. Here's how I've been rethinking the contract.</p>
+          <div class="note-footer">
+            <span class="card-tag tag-ai">AI Architecture</span>
+            <span class="note-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="#" class="note-card">
+          <div class="note-meta">
+            <span class="card-tag tag-strategy">Product</span>
+            <span class="note-date">February 2026</span>
+            <span class="note-read-time">· 4 min</span>
+          </div>
+          <h2 class="note-title">What product orgs consistently get wrong about AI readiness</h2>
+          <p class="note-excerpt">Most teams are asking "how do we ship AI features?" They should be asking "how do we structure our decisions so an AI can reason about them?" Readiness is an architecture problem, not a tooling problem.</p>
+          <div class="note-footer">
+            <span class="card-tag tag-strategy">Strategy</span>
+            <span class="note-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="#" class="note-card">
+          <div class="note-meta">
+            <span class="card-tag tag-systems">Design Systems</span>
+            <span class="note-date">January 2026</span>
+            <span class="note-read-time">· 5 min</span>
+          </div>
+          <h2 class="note-title">The invisible contract between a design system and the people who use it</h2>
+          <p class="note-excerpt">Every design system makes implicit promises — about consistency, about trust, about who holds the decisions. Most systems break down not because of technical debt, but because that contract was never made explicit in the first place.</p>
+          <div class="note-footer">
+            <span class="card-tag tag-systems">Design Systems</span>
+            <span class="note-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="#" class="note-card">
+          <div class="note-meta">
+            <span class="card-tag tag-ai">AI</span>
+            <span class="note-date">December 2025</span>
+            <span class="note-read-time">· 3 min</span>
+          </div>
+          <h2 class="note-title">Systems thinking at the edge of generative design</h2>
+          <p class="note-excerpt">When the output is unpredictable, the input architecture matters more. Generative tools don't eliminate the need for systems — they make systems load-bearing in new ways. The constraints are where the craft lives.</p>
+          <div class="note-footer">
+            <span class="card-tag tag-ai">AI · Design</span>
+            <span class="note-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="#" class="note-card">
+          <div class="note-meta">
+            <span class="card-tag tag-strategy">Product</span>
+            <span class="note-date">November 2025</span>
+            <span class="note-read-time">· 2 min</span>
+          </div>
+          <h2 class="note-title">The designer's role is shifting from craft to constraint authorship</h2>
+          <p class="note-excerpt">When AI can generate hundreds of design variants in seconds, the designer's job becomes defining which constraints make an output worth keeping. Taste is still the variable — it's just expressed upstream now.</p>
+          <div class="note-footer">
+            <span class="card-tag tag-strategy">Design · AI</span>
+            <span class="note-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="#" class="note-card">
+          <div class="note-meta">
+            <span class="card-tag tag-experience">UX</span>
+            <span class="note-date">October 2025</span>
+            <span class="note-read-time">· 4 min</span>
+          </div>
+          <h2 class="note-title">Why LLMs fail at UI — and what that reveals about how we document components</h2>
+          <p class="note-excerpt">When you ask an LLM to build a UI component and it goes wrong, the failure usually isn't the model. It's the absence of machine-legible intent in how the component was documented to begin with.</p>
+          <div class="note-footer">
+            <span class="card-tag tag-experience">UX · AI</span>
+            <span class="note-arrow">Read →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="work.html">Work</a>
+          <a href="about.html">About</a>
+          <a href="field-notes.html">Field Notes</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
