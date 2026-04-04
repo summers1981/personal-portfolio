@@ -91,7 +91,7 @@ strong { color: var(--text); font-weight: 600; }
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--accent);
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 16px;
