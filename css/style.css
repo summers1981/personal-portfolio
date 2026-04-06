@@ -862,7 +862,7 @@ strong { color: var(--text); font-weight: 600; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
-  align-items: start;
+  align-items: stretch;
 }
 
 .journey-era {
