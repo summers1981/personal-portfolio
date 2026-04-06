@@ -95,6 +95,7 @@
       }
     }
   </style>
+  <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));</script>
 </head>
 <body>
 
@@ -108,6 +109,10 @@
         <a href="field-notes.html" class="active">Field Notes</a>
         <a href="contact.html" class="nav-cta">Get in touch</a>
       </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
       <button class="nav-toggle" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
@@ -127,7 +132,7 @@
       <span class="section-label fade-up fade-up-1">Writing</span>
       <h1 class="fade-up fade-up-2">Field Notes</h1>
       <p class="fade-up fade-up-3">
-        Short thoughts from the edge of product, design, and AI — observations made while building at the frontier, not from a safe distance.
+        Short thoughts from the edge of product, design, and AI. Observations made while building at the frontier, not from a safe distance.
       </p>
     </div>
   </section>
@@ -143,7 +148,7 @@
             <span class="note-date">March 2026</span>
             <span class="note-read-time">· 3 min</span>
           </div>
-          <h2 class="note-title">Design tokens are the wrong abstraction for AI — and what to use instead</h2>
+          <h2 class="note-title">Design tokens are the wrong abstraction for AI, and what to use instead</h2>
           <p class="note-excerpt">Tokens were built for design-to-code pipelines. LLMs reason differently. When an AI encounters a token like <code style="font-family:monospace; font-size:0.82em; color:var(--accent);">color.brand.primary</code>, it has no semantic grip on what that means. Here's how I've been rethinking the contract.</p>
           <div class="note-footer">
             <span class="card-tag tag-ai">AI Architecture</span>
@@ -172,7 +177,7 @@
             <span class="note-read-time">· 5 min</span>
           </div>
           <h2 class="note-title">The invisible contract between a design system and the people who use it</h2>
-          <p class="note-excerpt">Every design system makes implicit promises — about consistency, about trust, about who holds the decisions. Most systems break down not because of technical debt, but because that contract was never made explicit in the first place.</p>
+          <p class="note-excerpt">Every design system makes implicit promises, about consistency, about trust, about who holds the decisions. Most systems break down not because of technical debt, but because that contract was never made explicit in the first place.</p>
           <div class="note-footer">
             <span class="card-tag tag-systems">Design Systems</span>
             <span class="note-arrow">Read →</span>
@@ -186,7 +191,7 @@
             <span class="note-read-time">· 3 min</span>
           </div>
           <h2 class="note-title">Systems thinking at the edge of generative design</h2>
-          <p class="note-excerpt">When the output is unpredictable, the input architecture matters more. Generative tools don't eliminate the need for systems — they make systems load-bearing in new ways. The constraints are where the craft lives.</p>
+          <p class="note-excerpt">When the output is unpredictable, the input architecture matters more. Generative tools don't eliminate the need for systems, they make systems load-bearing in new ways. The constraints are where the craft lives.</p>
           <div class="note-footer">
             <span class="card-tag tag-ai">AI · Design</span>
             <span class="note-arrow">Read →</span>
