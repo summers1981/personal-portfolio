@@ -73,17 +73,6 @@ if (revealItems.length) {
   revealItems.forEach(el => observer.observe(el));
 }
 
-// ── Theme toggle ─────────────────────────────────
-const themeBtn = document.getElementById('theme-toggle');
-if (themeBtn) {
-  themeBtn.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    const next = current === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
-}
-
 // ── Contact form (if present) ────────────────────
 const form = document.querySelector('.contact-form');
 if (form) {

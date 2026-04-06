@@ -1067,74 +1067,9 @@ strong { color: var(--text); font-weight: 600; }
 @media (max-width: 680px) {
   .nav-links, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
-  .theme-toggle { display: flex; }
   .grid-2, .grid-3, .work-grid { grid-template-columns: 1fr; }
   .hero-stats { gap: 24px; flex-wrap: wrap; }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-inner { flex-direction: column; align-items: flex-start; }
   .footer-copy { text-align: left; }
-}
-
-/* 20. THEME TOGGLE
-   ============================================= */
-.theme-toggle {
-  background: none;
-  border: 1px solid var(--border-mid);
-  border-radius: 8px;
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color var(--transition), border-color var(--transition);
-  padding: 0;
-  flex-shrink: 0;
-}
-
-.theme-toggle:hover {
-  color: var(--text);
-  border-color: var(--accent);
-}
-
-.theme-toggle svg {
-  width: 15px;
-  height: 15px;
-  pointer-events: none;
-}
-
-.icon-sun { display: none; }
-.icon-moon { display: block; }
-
-[data-theme="light"] .icon-sun { display: block; }
-[data-theme="light"] .icon-moon { display: none; }
-
-/* 21. LIGHT MODE
-   ============================================= */
-[data-theme="light"] {
-  --bg:           #F5F4F0;
-  --bg-2:         #EDECEA;
-  --bg-3:         #E3E1DD;
-  --bg-card:      #FAFAF8;
-  --accent:       #B8960A;
-  --accent-dim:   rgba(184, 150, 10, 0.06);
-  --accent-glow:  rgba(184, 150, 10, 0.12);
-  --text:         #111111;
-  --text-sub:     #444444;
-  --text-muted:   #888888;
-  --border:       #DDDAD3;
-  --border-mid:   #C8C4BC;
-}
-
-[data-theme="light"] body {
-  background-image: radial-gradient(circle, #D8D5CE 1px, transparent 1px);
-}
-
-[data-theme="light"] body::before {
-  background: radial-gradient(circle, rgba(184, 150, 10, 0.04) 0%, rgba(184, 150, 10, 0.015) 35%, transparent 70%);
-}
-
-[data-theme="light"] .nav {
-  background: rgba(245, 244, 240, 0.92);
 }
