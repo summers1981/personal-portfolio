@@ -819,11 +819,11 @@ strong { color: var(--text); font-weight: 600; }
 
 .avatar-placeholder {
   width: 100%;
-  aspect-ratio: 3 / 4;
-  max-width: 380px;
+  aspect-ratio: 1 / 1;
+  max-width: 420px;
   background: var(--bg-3);
   border: 1px solid rgba(247, 201, 72, 0.25);
-  border-radius: 16px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1058,7 +1058,7 @@ strong { color: var(--text); font-weight: 600; }
   .grid-3, .work-grid, .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .featured-grid { grid-template-columns: 1fr; }
   .about-intro { grid-template-columns: 1fr; }
-  .avatar-placeholder { max-width: 280px; }
+  .avatar-placeholder { max-width: 300px; }
   .journey { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .cta-strip { flex-direction: column; text-align: center; }
