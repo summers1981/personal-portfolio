@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="When AI can generate hundreds of design variants in seconds, the designer's job becomes defining which constraints make an output worth keeping. Colin Summers." />
+  <title>The designer's role is shifting from craft to constraint authorship — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    .article-header { max-width: 720px; }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .article-date { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em; }
+    .article-read-time { font-size: 0.78rem; color: var(--text-muted); }
+
+    .article-body {
+      max-width: 720px;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+
+    .article-body h2 {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    .article-body h2:first-child { margin-top: 0; }
+
+    .article-body p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 20px 28px;
+      margin: 40px 0;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .pull-quote p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover, .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta { border-color: #0A0A0A !important; color: #0A0A0A !important; }
+    .nav-cta:hover { background: #0A0A0A !important; color: #F7C948 !important; }
+
+    .nav-toggle span { background: #0A0A0A; }
+    .nav-mobile { background: #FAF0C8; border-bottom-color: rgba(0,0,0,0.12); }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .cta-strip { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); }
+
+    .btn-primary { background: #0A0A0A; color: #F7C948; border-color: #0A0A0A; }
+    .btn-primary:hover { background: #2A2A2A; border-color: #2A2A2A; }
+
+    .footer { background: rgba(0,0,0,0.06); border-top-color: rgba(0,0,0,0.12); }
+    .footer-copy, .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../field-notes.html" class="active">Field Notes</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../field-notes.html">Field Notes</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- ARTICLE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../field-notes.html" class="back-link fade-up fade-up-1">Back to Field Notes</a>
+      <div class="article-header">
+        <span class="section-label fade-up fade-up-1">Design · AI</span>
+        <h1 class="fade-up fade-up-2">The designer's role is shifting from craft to constraint authorship</h1>
+        <div class="article-meta fade-up fade-up-3">
+          <span class="card-tag tag-strategy">Product</span>
+          <span class="article-date">November 2025</span>
+          <span class="article-read-time">· 2 min read</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="article-body fade-up fade-up-1">
+
+        <p>
+          For most of the history of digital design, the designer's core skill was craft: the ability to manipulate pixels, balance compositions, choose typography, and produce outputs that were both functional and beautiful. That skill still matters. But it's no longer the bottleneck.
+        </p>
+
+        <p>
+          When a generative tool can produce 50 layout variations in the time it takes a designer to produce one, the limiting factor shifts. The question is no longer "can you make this?" It's "which of these is right, and why?" And more importantly: "what instructions would produce the right thing the first time?"
+        </p>
+
+        <div class="pull-quote">
+          <p>"Taste was always the designer's edge. What's changing is where taste gets expressed — not in the output, but in the constraints that shape it."</p>
+        </div>
+
+        <h2>Upstream moves</h2>
+
+        <p>
+          This is what I mean by constraint authorship. The designer's judgment — their taste, their understanding of context, their sense of what fits — is now most valuable when it's expressed upstream: in the principles that govern what gets generated, the rules that shape how components compose, the language that tells a model what "on-brand" actually means.
+        </p>
+
+        <p>
+          A designer who can write clear, opinionated constraints is more valuable in an AI-augmented workflow than one who can produce polished artifacts quickly. Because the constraints scale. The artifacts don't — not anymore.
+        </p>
+
+        <h2>This isn't the end of craft</h2>
+
+        <p>
+          It would be easy to read this as a deskilling argument. It isn't. Constraint authorship requires deep craft knowledge — you can't write good constraints without understanding what you're constraining. The designer who defines how a component should and shouldn't compose needs to understand composition deeply. The designer who writes the rules for AI-generated UI needs to understand UI deeply enough to know when those rules are being violated.
+        </p>
+
+        <p>
+          What changes is how that knowledge gets expressed. Less in individual artifacts. More in the systems, rules, and structured decisions that shape what AI produces. The medium of design is shifting from the canvas to the instruction set.
+        </p>
+
+        <p>
+          The designers who thrive in this shift will be the ones who can hold both: the deep craft understanding that makes their constraints meaningful, and the systems thinking that lets them encode that understanding in a form that scales.
+        </p>
+
+        <hr class="article-divider" />
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          This is a short provocation, not a comprehensive argument. <a href="../contact.html" style="color: var(--text); font-weight: 600;">Get in touch</a> if you want to push back on it or build on it.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip" style="max-width: 720px;">
+        <h2>Want to talk through this?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../field-notes.html">Field Notes</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

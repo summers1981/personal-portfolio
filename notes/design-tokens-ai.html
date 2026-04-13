@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Design tokens were built for design-to-code pipelines. LLMs reason differently. Here's how to rethink the contract. Colin Summers." />
+  <title>Design tokens are the wrong abstraction for AI — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    /* Article layout */
+    .article-header {
+      max-width: 720px;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .article-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .article-read-time {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .article-body {
+      max-width: 720px;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+
+    .article-body h2 {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    .article-body h2:first-child {
+      margin-top: 0;
+    }
+
+    .article-body p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .article-body ul {
+      margin: 0 0 24px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .article-body ul li {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-sub);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .article-body ul li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 20px 28px;
+      margin: 40px 0;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .pull-quote p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    .code-token {
+      font-family: monospace;
+      font-size: 0.88em;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+
+    /* Inverted theme */
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover,
+    .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta {
+      border-color: #0A0A0A !important;
+      color: #0A0A0A !important;
+    }
+    .nav-cta:hover {
+      background: #0A0A0A !important;
+      color: #F7C948 !important;
+    }
+
+    .nav-toggle span { background: #0A0A0A; }
+
+    .nav-mobile {
+      background: #FAF0C8;
+      border-bottom-color: rgba(0,0,0,0.12);
+    }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .pull-quote {
+      border-left-color: #0A0A0A;
+    }
+
+    .cta-strip {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .btn-primary {
+      background: #0A0A0A;
+      color: #F7C948;
+      border-color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: #2A2A2A;
+      border-color: #2A2A2A;
+    }
+
+    .footer {
+      background: rgba(0,0,0,0.06);
+      border-top-color: rgba(0,0,0,0.12);
+    }
+    .footer-copy,
+    .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../field-notes.html" class="active">Field Notes</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../field-notes.html">Field Notes</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- ARTICLE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../field-notes.html" class="back-link fade-up fade-up-1">Back to Field Notes</a>
+      <div class="article-header">
+        <span class="section-label fade-up fade-up-1">AI Architecture</span>
+        <h1 class="fade-up fade-up-2">Design tokens are the wrong abstraction for AI — and what to use instead</h1>
+        <div class="article-meta fade-up fade-up-3">
+          <span class="card-tag tag-ai">AI</span>
+          <span class="article-date">March 2026</span>
+          <span class="article-read-time">· 3 min read</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="article-body fade-up fade-up-1">
+
+        <p>
+          Design tokens solved a real problem. They gave design and engineering teams a shared vocabulary — a way to encode decisions about colour, spacing, and typography into a form that could move between tools without losing meaning. For human-to-human communication, they work well.
+        </p>
+
+        <p>
+          But when an AI encounters a token like <span class="code-token">color.brand.primary</span>, something breaks down. The name signals structure — a namespace, a hierarchy — but it doesn't signal intent. The model has no grip on what "brand primary" means in context. Is this a background? An interactive element? A state? A constraint? Without that context, the model has to guess.
+        </p>
+
+        <div class="pull-quote">
+          <p>"Token names tell a machine what a decision is called. They rarely tell it why the decision was made — and that's the part AI actually needs."</p>
+        </div>
+
+        <h2>The problem with abstraction layers</h2>
+
+        <p>
+          Tokens are an abstraction layer built for design-to-code pipelines. They assume a human in the middle — someone who can look up what <span class="code-token">color.brand.primary</span> resolves to, understand the brand context, and apply it appropriately. Remove that human, and the abstraction stops being useful. It becomes noise.
+        </p>
+
+        <p>
+          LLMs reason by pattern-matching across context. They're good at inferring intent from well-structured, semantically rich inputs. A token name like <span class="code-token">color.interactive.default</span> gives more to work with than <span class="code-token">color.brand.primary</span> — but it still leaves the model guessing about scope, state, and relationship to other tokens.
+        </p>
+
+        <h2>What LLMs actually need</h2>
+
+        <p>
+          Through hands-on work structuring design systems for AI use, I've found three things make the difference:
+        </p>
+
+        <ul>
+          <li><strong>Purpose-first naming.</strong> Tokens should express what they do, not what they belong to. <span class="code-token">color.action.primary.default</span> over <span class="code-token">color.brand.blue</span>. The semantic layer needs to be in the name itself, not in a doc a model will never see.</li>
+          <li><strong>Structured usage constraints.</strong> A token needs to know — and communicate — where it can and can't be used. This isn't prose documentation. It's structured metadata: allowed contexts, forbidden contexts, relationships to other tokens.</li>
+          <li><strong>Intent anchors.</strong> Short, structured descriptions of what a decision is trying to achieve. Not "this is the primary brand colour" but "use for the single most important interactive element in a view — buttons, primary CTAs only."</li>
+        </ul>
+
+        <h2>A different contract</h2>
+
+        <p>
+          The shift I'm advocating for isn't a renaming exercise. It's a rethinking of what a token is for. Tokens were built to communicate a decision to a pipeline. AI-ready tokens need to communicate a decision to a reasoner — something that will apply the token in novel contexts the original author never anticipated.
+        </p>
+
+        <p>
+          That means tokens need more metadata, not less. They need to be opinionated about their own use. And they need to be written with the assumption that the person applying them might be a model that has never seen your product, your brand guidelines, or your design history.
+        </p>
+
+        <div class="pull-quote">
+          <p>"The best AI-ready token is one that carries its own usage rules — so the model doesn't have to infer them."</p>
+        </div>
+
+        <h2>What this looks like in practice</h2>
+
+        <p>
+          In practice, this means treating token documentation as structured data rather than prose commentary. Each token gets a machine-parseable block: name, purpose, allowed contexts, related tokens, visual output, and deprecation status.
+        </p>
+
+        <p>
+          It also means revisiting the token taxonomy itself. Rather than organising by origin (brand, product, system), organise by function: action tokens, feedback tokens, layout tokens, content tokens. Functions are what AI tools reason about. Origins are for humans who already know the brand.
+        </p>
+
+        <p>
+          The result is a design system that's still readable by designers and engineers — but that also works as a reliable knowledge base for AI-assisted product building. The abstraction layer doesn't disappear; it gets richer, more intentional, and more useful to everyone.
+        </p>
+
+        <hr class="article-divider" />
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          This is part of ongoing work on AI-ready design systems architecture. If you're thinking through similar challenges, <a href="../contact.html" style="color: var(--text); font-weight: 600;">get in touch</a>.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip" style="max-width: 720px;">
+        <h2>Want to talk through this?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../field-notes.html">Field Notes</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

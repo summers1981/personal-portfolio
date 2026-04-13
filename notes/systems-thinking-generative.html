@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="When the output is unpredictable, the input architecture matters more. Generative tools don't eliminate the need for systems — they make systems load-bearing in new ways. Colin Summers." />
+  <title>Systems thinking at the edge of generative design — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    .article-header { max-width: 720px; }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .article-date { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em; }
+    .article-read-time { font-size: 0.78rem; color: var(--text-muted); }
+
+    .article-body {
+      max-width: 720px;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+
+    .article-body h2 {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    .article-body h2:first-child { margin-top: 0; }
+
+    .article-body p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .article-body ul {
+      margin: 0 0 24px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .article-body ul li {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-sub);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .article-body ul li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 20px 28px;
+      margin: 40px 0;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .pull-quote p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover, .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta { border-color: #0A0A0A !important; color: #0A0A0A !important; }
+    .nav-cta:hover { background: #0A0A0A !important; color: #F7C948 !important; }
+
+    .nav-toggle span { background: #0A0A0A; }
+    .nav-mobile { background: #FAF0C8; border-bottom-color: rgba(0,0,0,0.12); }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .cta-strip { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); }
+
+    .btn-primary { background: #0A0A0A; color: #F7C948; border-color: #0A0A0A; }
+    .btn-primary:hover { background: #2A2A2A; border-color: #2A2A2A; }
+
+    .footer { background: rgba(0,0,0,0.06); border-top-color: rgba(0,0,0,0.12); }
+    .footer-copy, .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../field-notes.html" class="active">Field Notes</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../field-notes.html">Field Notes</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- ARTICLE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../field-notes.html" class="back-link fade-up fade-up-1">Back to Field Notes</a>
+      <div class="article-header">
+        <span class="section-label fade-up fade-up-1">AI · Design</span>
+        <h1 class="fade-up fade-up-2">Systems thinking at the edge of generative design</h1>
+        <div class="article-meta fade-up fade-up-3">
+          <span class="card-tag tag-ai">AI</span>
+          <span class="article-date">December 2025</span>
+          <span class="article-read-time">· 3 min read</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="article-body fade-up fade-up-1">
+
+        <p>
+          There's a version of the AI-in-design story that goes like this: generative tools will replace the need for systems. Why build and maintain a component library when a model can generate any component on demand? Why manage a token set when AI can infer the right visual decision from context?
+        </p>
+
+        <p>
+          I understand the appeal of this argument. It's also wrong — and the error is in what it assumes about what systems are for.
+        </p>
+
+        <div class="pull-quote">
+          <p>"Systems don't exist to produce consistent outputs. They exist to encode consistent intent. Those are very different things — and only one of them can be delegated to a generative model."</p>
+        </div>
+
+        <h2>What generative tools actually change</h2>
+
+        <p>
+          Generative design tools change the speed and cost of producing design artifacts. They make it faster to explore variations, to prototype interactions, to fill a canvas with plausible UI. What they don't change is the need for someone to decide which variation is right, which interaction fits the product's logic, which UI expression is on-brand and contextually appropriate.
+        </p>
+
+        <p>
+          That judgment — the act of deciding — is what design systems encode. Not just the visual output, but the reasoning behind it: why this component, not that one; why this token value, not a slightly different one; why this pattern is the default even when another pattern might work in this specific case.
+        </p>
+
+        <p>
+          When you remove the system, you don't give designers more freedom. You give them more decisions — the kind that should have been made once, at a higher level, by the people with the most context. That's not liberation. That's overhead.
+        </p>
+
+        <h2>Constraints are the craft</h2>
+
+        <p>
+          This is the insight that generative-tool sceptics and enthusiasts both tend to miss: constraints are not the opposite of creativity. They're the medium it works in. The best design work — and the best systems thinking — happens at the boundary of what's allowed and what's not.
+        </p>
+
+        <p>
+          A design system that says "these are your components, here's how they compose, here are the rules" is not limiting creative output. It's defining the game board on which creativity can happen productively. Remove the board and you don't get more creativity — you get an infinite canvas that produces inconsistency at speed.
+        </p>
+
+        <p>
+          Generative tools are extraordinarily good at filling space within constraints. They're poor at defining what the constraints should be. That's still a human problem — and increasingly, a systems leadership problem.
+        </p>
+
+        <h2>Where systems thinking goes next</h2>
+
+        <p>
+          The shift I'm seeing in organisations that are using generative tools well is that systems thinking is moving earlier in the process. Instead of the system being consulted when a designer needs a component, the system is consulted when the problem is being framed — informing which questions get asked, which decisions get deferred, which constraints get loaded into the generative tool's context.
+        </p>
+
+        <p>
+          This is a different kind of systems work. Less about component maintenance, more about constraint authorship. Less about managing a library, more about defining what "good" means in a form that a generative tool can actually use.
+        </p>
+
+        <p>
+          The teams doing this well aren't treating generative tools as replacements for their design system. They're treating their design system as the instruction set that makes their generative tools reliable. The constraints are load-bearing — and that makes them worth building carefully.
+        </p>
+
+        <hr class="article-divider" />
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          This reflects thinking developed while working on AI-ready design system architecture. <a href="../contact.html" style="color: var(--text); font-weight: 600;">Get in touch</a> if you're navigating similar territory.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip" style="max-width: 720px;">
+        <h2>Want to talk through this?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../field-notes.html">Field Notes</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

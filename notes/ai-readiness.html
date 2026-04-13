@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Most teams are asking how to ship AI features. They should be asking how to structure decisions so AI can reason about them. Colin Summers." />
+  <title>What product orgs get wrong about AI readiness — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    .article-header { max-width: 720px; }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .article-date { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em; }
+    .article-read-time { font-size: 0.78rem; color: var(--text-muted); }
+
+    .article-body {
+      max-width: 720px;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+
+    .article-body h2 {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    .article-body h2:first-child { margin-top: 0; }
+
+    .article-body p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .article-body ul {
+      margin: 0 0 24px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .article-body ul li {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-sub);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .article-body ul li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 20px 28px;
+      margin: 40px 0;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .pull-quote p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover, .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta { border-color: #0A0A0A !important; color: #0A0A0A !important; }
+    .nav-cta:hover { background: #0A0A0A !important; color: #F7C948 !important; }
+
+    .nav-toggle span { background: #0A0A0A; }
+    .nav-mobile { background: #FAF0C8; border-bottom-color: rgba(0,0,0,0.12); }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .cta-strip { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); }
+
+    .btn-primary { background: #0A0A0A; color: #F7C948; border-color: #0A0A0A; }
+    .btn-primary:hover { background: #2A2A2A; border-color: #2A2A2A; }
+
+    .footer { background: rgba(0,0,0,0.06); border-top-color: rgba(0,0,0,0.12); }
+    .footer-copy, .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../field-notes.html" class="active">Field Notes</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../field-notes.html">Field Notes</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- ARTICLE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../field-notes.html" class="back-link fade-up fade-up-1">Back to Field Notes</a>
+      <div class="article-header">
+        <span class="section-label fade-up fade-up-1">Strategy</span>
+        <h1 class="fade-up fade-up-2">What product orgs consistently get wrong about AI readiness</h1>
+        <div class="article-meta fade-up fade-up-3">
+          <span class="card-tag tag-strategy">Product</span>
+          <span class="article-date">February 2026</span>
+          <span class="article-read-time">· 4 min read</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="article-body fade-up fade-up-1">
+
+        <p>
+          Every product organisation I speak to is thinking about AI. The conversations are usually the same: which tools to adopt, which features to ship, how to run the experiment. The question everyone is asking is "how do we use AI?" The question almost nobody is asking is "are we structured in a way that lets AI be useful to us?"
+        </p>
+
+        <p>
+          Those are very different questions, and the gap between them is where most AI initiatives quietly stall.
+        </p>
+
+        <div class="pull-quote">
+          <p>"AI readiness is not a tooling problem. It's an architecture problem — the shape of how your organisation makes and records decisions."</p>
+        </div>
+
+        <h2>The tools-first trap</h2>
+
+        <p>
+          The tools-first approach is understandable. It's visible, it's measurable, and it produces something you can point to in a quarterly review. "We shipped Copilot to the engineering team." "We added an AI summarisation feature." These are concrete, and they often produce genuine value. But they tend to be localised — islands of AI capability in an organisation that hasn't changed how it thinks.
+        </p>
+
+        <p>
+          The problem is that AI tools are only as good as the decisions they can reason about. When a model is asked to help design a feature, generate a component, or make a product recommendation, it's working from whatever context it can access. If that context is poorly structured — scattered across Confluence docs, Figma files with inconsistent naming, Slack threads that were never resolved — the model is building on sand.
+        </p>
+
+        <h2>What "readiness" actually means</h2>
+
+        <p>
+          AI readiness, in practice, means asking a different question at every layer of how you work: can a model understand this well enough to help?
+        </p>
+
+        <ul>
+          <li><strong>Product decisions.</strong> Are your strategy documents written with enough clarity that an AI could infer your priorities? Or are they aspirational prose full of internal jargon?</li>
+          <li><strong>Design systems.</strong> Are your tokens, components, and patterns structured so a model can apply them correctly — or do they require human context to interpret?</li>
+          <li><strong>Documentation.</strong> Is your knowledge structured as data, or buried in text? Can it be queried, not just read?</li>
+          <li><strong>Decision records.</strong> When your team makes a significant architectural or design decision, do you record why? The why is what AI needs. The what is already in the code.</li>
+        </ul>
+
+        <h2>Readiness is progressive, not binary</h2>
+
+        <p>
+          The good news is that readiness isn't a threshold you have to reach before AI becomes useful. It's a spectrum, and even small improvements compound. A design system with cleaner token naming makes AI-assisted component generation 10% more reliable. Documentation written in structured formats makes retrieval-augmented tools noticeably more accurate. Decision records with clear rationale make it possible to use AI to audit consistency over time.
+        </p>
+
+        <p>
+          The teams I've seen get the most out of AI aren't the ones who adopted the most tools. They're the ones who spent time making their existing knowledge legible to machines — and then found that it was also more legible to new team members, to cross-functional partners, and to their future selves.
+        </p>
+
+        <div class="pull-quote">
+          <p>"Structure your decisions well, and AI becomes a multiplier. Leave them opaque, and AI is just an expensive autocomplete."</p>
+        </div>
+
+        <h2>Where to start</h2>
+
+        <p>
+          If you're trying to move your organisation toward genuine AI readiness, the most useful first step isn't adding a new tool. It's auditing where your decisions live and how structured they are.
+        </p>
+
+        <p>
+          Pick one area — your design system, your product strategy docs, your component library — and ask: if I gave this to an AI with no other context, what would it be able to do? The answer will tell you more about your AI readiness than any tooling audit could.
+        </p>
+
+        <hr class="article-divider" />
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          This reflects observations from design systems and product strategy work across multiple organisations. <a href="../contact.html" style="color: var(--text); font-weight: 600;">Get in touch</a> if you're working through similar challenges.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip" style="max-width: 720px;">
+        <h2>Want to talk through this?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../field-notes.html">Field Notes</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

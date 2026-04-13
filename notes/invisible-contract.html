@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Every design system makes implicit promises about consistency, trust, and who holds the decisions. Most break down because that contract was never made explicit. Colin Summers." />
+  <title>The invisible contract of a design system — Colin Summers</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>" />
+  <style>
+    .article-header { max-width: 720px; }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .article-date { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em; }
+    .article-read-time { font-size: 0.78rem; color: var(--text-muted); }
+
+    .article-body {
+      max-width: 720px;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+
+    .article-body h2 {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    .article-body h2:first-child { margin-top: 0; }
+
+    .article-body p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .article-body ul {
+      margin: 0 0 24px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .article-body ul li {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-sub);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .article-body ul li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 20px 28px;
+      margin: 40px 0;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .pull-quote p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+
+    :root {
+      --bg:           #FDF6DC;
+      --bg-2:         #FAF0C8;
+      --bg-3:         #F5E8B4;
+      --bg-card:      #FBF2CE;
+      --accent:       #0A0A0A;
+      --accent-dim:   rgba(0, 0, 0, 0.06);
+      --accent-glow:  rgba(0, 0, 0, 0.14);
+      --text:         #0A0A0A;
+      --text-sub:     #2A1D00;
+      --text-muted:   #6B4E00;
+      --border:       rgba(0, 0, 0, 0.10);
+      --border-mid:   rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::before { display: none; }
+
+    .nav {
+      background: rgba(253, 246, 220, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: rgba(0,0,0,0.10);
+    }
+
+    .nav-links a { color: #3A2800; }
+    .nav-links a:hover, .nav-links a.active { color: #0A0A0A; }
+
+    .nav-cta { border-color: #0A0A0A !important; color: #0A0A0A !important; }
+    .nav-cta:hover { background: #0A0A0A !important; color: #F7C948 !important; }
+
+    .nav-toggle span { background: #0A0A0A; }
+    .nav-mobile { background: #FAF0C8; border-bottom-color: rgba(0,0,0,0.12); }
+    .nav-mobile a { color: #0A0A0A; }
+
+    .section-label { color: #6B4E00; }
+    .section-label::before { background: #6B4E00; }
+
+    .back-link { color: #6B4E00; }
+    .back-link:hover { color: #0A0A0A; }
+
+    .cta-strip { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); }
+
+    .btn-primary { background: #0A0A0A; color: #F7C948; border-color: #0A0A0A; }
+    .btn-primary:hover { background: #2A2A2A; border-color: #2A2A2A; }
+
+    .footer { background: rgba(0,0,0,0.06); border-top-color: rgba(0,0,0,0.12); }
+    .footer-copy, .footer-links a { color: #5A4200; }
+    .footer-links a:hover { color: #0A0A0A; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><span class="logo-mark">CS</span></a>
+      <div class="nav-links">
+        <a href="../work.html">Work</a>
+        <a href="../about.html">About</a>
+        <a href="../field-notes.html" class="active">Field Notes</a>
+        <a href="../contact.html" class="nav-cta">Get in touch</a>
+      </div>
+      <button class="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="../index.html">Home</a>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../field-notes.html">Field Notes</a>
+    <a href="../contact.html">Contact</a>
+  </div>
+
+  <!-- ARTICLE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <a href="../field-notes.html" class="back-link fade-up fade-up-1">Back to Field Notes</a>
+      <div class="article-header">
+        <span class="section-label fade-up fade-up-1">Design Systems</span>
+        <h1 class="fade-up fade-up-2">The invisible contract between a design system and the people who use it</h1>
+        <div class="article-meta fade-up fade-up-3">
+          <span class="card-tag tag-systems">Design Systems</span>
+          <span class="article-date">January 2026</span>
+          <span class="article-read-time">· 5 min read</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="article-body fade-up fade-up-1">
+
+        <p>
+          Every design system is a promise. When a product team adopts one, they're accepting a deal: in exchange for consistency, speed, and a shared language, they give up some local autonomy. They agree to use the components as intended, to follow the token conventions, to trust the decisions that have been baked in by someone else.
+        </p>
+
+        <p>
+          That's a significant ask. And yet most design systems never make it explicit. The contract is invisible — assumed, not written. Which is why so many systems fail not at launch, but six months later, when the promises start getting broken and nobody can quite explain why.
+        </p>
+
+        <div class="pull-quote">
+          <p>"Design system adoption is an act of trust. Most systems treat it as an act of compliance — and then wonder why teams route around them."</p>
+        </div>
+
+        <h2>What the contract contains</h2>
+
+        <p>
+          The invisible contract has several clauses, whether or not they're ever written down. Understanding them is the first step to making them explicit.
+        </p>
+
+        <p>
+          <strong>The consistency clause.</strong> "If you use our components, your product will feel consistent with every other product that uses them." This is the most obvious promise and usually the one that gets broken first — because consistency is hard to maintain across teams, platforms, and time, and the system often hasn't defined what "consistent" actually means in practice.
+        </p>
+
+        <p>
+          <strong>The speed clause.</strong> "You'll move faster because the decisions have been made for you." This promise requires that the system genuinely covers enough common cases that teams aren't constantly building workarounds. When they are, the speed promise inverts — the system slows you down because you're fighting against it rather than with it.
+        </p>
+
+        <p>
+          <strong>The trust clause.</strong> "The decisions in this system are good ones. You can rely on them." This is the most fragile clause. It depends entirely on the system team maintaining quality, communicating rationale, and responding credibly when something is wrong. A single bad component that ships and causes problems can erode this clause for a long time.
+        </p>
+
+        <p>
+          <strong>The authority clause.</strong> "These decisions are not up for renegotiation in every project. They're made here, once, by us." This is the one that causes the most friction — because it requires product teams to give up real control, and that's uncomfortable when their design problem doesn't quite fit the available solution.
+        </p>
+
+        <h2>Why systems break down</h2>
+
+        <p>
+          Design systems don't usually fail because of bad components or poor token coverage. They fail because the contract breaks down. One of four things typically happens:
+        </p>
+
+        <ul>
+          <li>The system team can't maintain the quality or pace the consistency clause requires, so teams start building local alternatives.</li>
+          <li>The system doesn't cover enough real cases, so the speed clause becomes a fiction and teams stop believing it.</li>
+          <li>A critical component ships with problems, the trust clause cracks, and teams start auditing every decision rather than relying on them.</li>
+          <li>The authority clause is enforced too rigidly, teams feel blocked rather than enabled, and adoption quietly erodes from the edges.</li>
+        </ul>
+
+        <p>
+          What's notable is that none of these failures are primarily technical. They're relational. They're about expectations that were never aligned, promises that were never clearly made, and disappointments that were never properly addressed.
+        </p>
+
+        <h2>Making the contract explicit</h2>
+
+        <p>
+          The most useful thing a design system team can do — often more useful than building another component — is to write down the contract. Not as a legal document. As a clear, human statement of what the system promises, what it asks in return, and what happens when either side doesn't deliver.
+        </p>
+
+        <p>
+          This means being honest about scope. Not everything will be covered. Not every edge case will have a component. The system should say so clearly, and explain the process for raising gaps rather than leaving teams to discover it through friction.
+        </p>
+
+        <p>
+          It means being clear about authority. Which decisions are made by the system and final? Which are open to local variation? Where does the system end and the product team's judgment begin? Ambiguity here is where most resentment lives.
+        </p>
+
+        <p>
+          And it means establishing accountability. When the system makes a promise and breaks it — when a component is buggy, when documentation is wrong, when a design decision turns out to be flawed — there needs to be a clear way for that to be acknowledged and fixed. Trust is earned through follow-through, not through documentation.
+        </p>
+
+        <div class="pull-quote">
+          <p>"The best-maintained design systems aren't the most technically sophisticated. They're the ones where everyone understands the deal — and the system team honours it."</p>
+        </div>
+
+        <h2>The contract as a living document</h2>
+
+        <p>
+          The other thing worth noting is that contracts change. The deal a design system offers at launch — when the team is small and moving fast — is different from the deal it offers when it's serving eight product teams across three platforms. The implicit contract shifts, but if nobody updates the explicit version, teams are operating on outdated assumptions.
+        </p>
+
+        <p>
+          Revisiting the contract regularly — what we promise, what we ask, where our authority ends — is one of the most underrated maintenance tasks a system team can do. It's not glamorous. But it's what keeps the invisible relationship working.
+        </p>
+
+        <hr class="article-divider" />
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          These observations come from a decade of building and leading design systems across organisations of different sizes and cultures. <a href="../contact.html" style="color: var(--text); font-weight: 600;">Get in touch</a> if this resonates.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-strip" style="max-width: 720px;">
+        <h2>Want to talk through this?</h2>
+        <a href="../contact.html" class="btn btn-primary">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-mark">CS</span></span>
+        <div class="footer-links">
+          <a href="../work.html">Work</a>
+          <a href="../about.html">About</a>
+          <a href="../field-notes.html">Field Notes</a>
+          <a href="../contact.html">Contact</a>
+          <a href="https://www.linkedin.com/in/summers1981/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/summers1981" target="_blank" rel="noopener">Twitter</a>
+        </div>
+        <span class="footer-copy">© 2025 Colin Summers</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
