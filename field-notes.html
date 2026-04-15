@@ -27,6 +27,21 @@
       transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
     }
 
+    .note-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-glow);
+    }
+
+    .note-card:hover .note-title {
+      color: var(--accent);
+    }
+
+    .note-card:hover .note-arrow {
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
     .note-meta {
       display: flex;
       align-items: center;
@@ -122,7 +137,7 @@
     <div class="container">
       <div class="notes-grid fade-up fade-up-1">
 
-        <div class="note-card">
+        <a class="note-card">
           <div class="note-meta">
             <span class="card-tag tag-ai">AI</span>
             <span class="note-date">March 2026</span>
@@ -132,10 +147,11 @@
           <p class="note-excerpt">Tokens were built for developer handoff pipelines. LLMs reason differently. When an AI encounters a token like <code style="font-family:monospace; font-size:0.82em; color:var(--accent);">color.brand.primary</code>, it has no semantic grip on what that means. Here's how I've been rethinking the contract.</p>
           <div class="note-footer">
             <span class="card-tag tag-ai">AI Architecture</span>
+            <span class="note-arrow">Read →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="note-card">
+        <a class="note-card">
           <div class="note-meta">
             <span class="card-tag tag-strategy">Product</span>
             <span class="note-date">February 2026</span>
@@ -145,10 +161,11 @@
           <p class="note-excerpt">Most teams are asking "how do we ship AI features?" They should be asking "how do we structure our decisions so an AI can reason about them?" Readiness is an architecture problem, not a tooling problem.</p>
           <div class="note-footer">
             <span class="card-tag tag-strategy">Strategy</span>
+            <span class="note-arrow">Read →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="note-card">
+        <a class="note-card">
           <div class="note-meta">
             <span class="card-tag tag-systems">Design Systems</span>
             <span class="note-date">January 2026</span>
@@ -158,10 +175,11 @@
           <p class="note-excerpt">Every design system makes implicit promises about consistency, about trust, about who holds the decisions. Most systems break down not because of technical debt, but because that contract was never made explicit in the first place.</p>
           <div class="note-footer">
             <span class="card-tag tag-systems">Design Systems</span>
+            <span class="note-arrow">Read →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="note-card">
+        <a class="note-card">
           <div class="note-meta">
             <span class="card-tag tag-ai">AI</span>
             <span class="note-date">December 2025</span>
@@ -171,10 +189,11 @@
           <p class="note-excerpt">When the output is unpredictable, the input architecture matters more. Generative tools don't eliminate the need for systems — they give systems a new structural role. The constraints are where the craft lives.</p>
           <div class="note-footer">
             <span class="card-tag tag-ai">AI · Design</span>
+            <span class="note-arrow">Read →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="note-card">
+        <a class="note-card">
           <div class="note-meta">
             <span class="card-tag tag-strategy">Product</span>
             <span class="note-date">November 2025</span>
@@ -184,10 +203,11 @@
           <p class="note-excerpt">When AI can generate hundreds of design variants in seconds, the designer's job becomes defining which constraints make an output worth keeping. Taste is still the variable — it's just expressed upstream now.</p>
           <div class="note-footer">
             <span class="card-tag tag-strategy">Design · AI</span>
+            <span class="note-arrow">Read →</span>
           </div>
-        </div>
+        </a>
 
-        <div class="note-card">
+        <a class="note-card">
           <div class="note-meta">
             <span class="card-tag tag-experience">UX</span>
             <span class="note-date">October 2025</span>
@@ -197,8 +217,9 @@
           <p class="note-excerpt">When you ask an LLM to build a UI component and it goes wrong, the failure usually isn't the model. It's the absence of clear, structured intent in how the component was documented to begin with.</p>
           <div class="note-footer">
             <span class="card-tag tag-experience">UX · AI</span>
+            <span class="note-arrow">Read →</span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
