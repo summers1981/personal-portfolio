@@ -591,10 +591,10 @@
             <span class="section-label">Objective</span>
             <h2>Making design decisions machine-legible</h2>
             <p>
-              The objective was to evolve the design system's architecture so that AI tools — from coding assistants to generative UI — could reliably interpret, use, and extend it without producing inconsistent or broken output.
+              The objective was to evolve the design system's architecture so that AI tools, from coding assistants to generative UI, could reliably interpret, use, and extend it without producing inconsistent or broken output.
             </p>
             <p>
-              This meant rethinking how tokens are named and structured, how component documentation is written, and how the system as a whole communicates intent — not just to designers and engineers, but to language models.
+              This meant rethinking how tokens are named and structured, how component documentation is written, and how the system as a whole communicates intent. Not just to designers and engineers, but to language models.
             </p>
           </div>
 
@@ -604,7 +604,7 @@
             <h2>Design systems weren't built for machines</h2>
             <ul class="challenge-list">
               <li>Token names optimised for human readability but ambiguous to LLMs without semantic context</li>
-              <li>Component documentation written as prose — useful for humans, hard to parse programmatically</li>
+              <li>Component documentation written as prose. Useful for humans, hard to parse programmatically</li>
               <li>No structured metadata describing component purpose, constraints, or relationships</li>
               <li>AI tools hallucinating component names, misapplying tokens, or generating inconsistent UI</li>
               <li>Lack of machine-readable usage rules meant LLMs couldn't distinguish correct from incorrect use</li>
@@ -617,10 +617,10 @@
             <span class="section-label">Solutions</span>
             <h2>Structured for both humans and machines</h2>
             <ul class="solution-list">
-              <li>Audited token naming conventions and added semantic clarity — purpose-first names that LLMs can interpret without additional context</li>
+              <li>Audited token naming conventions and added semantic clarity. Purpose-first names that LLMs can interpret without additional context</li>
               <li>Introduced structured component metadata: purpose, constraints, required props, forbidden combinations, and accessibility requirements</li>
               <li>Formalised component documentation into consistent schemas that can be parsed programmatically</li>
-              <li>Created prompt-ready system summaries — condensed, structured descriptions of the design system for use in AI context windows</li>
+              <li>Created prompt-ready system summaries. Condensed, structured descriptions of the design system for use in AI context windows</li>
               <li>Defined contribution guidelines for AI-generated components, including validation rules and review criteria</li>
               <li>Established a token-to-code mapping layer so LLMs can correctly reference design decisions when generating UI</li>
             </ul>

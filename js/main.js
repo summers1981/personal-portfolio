@@ -5,10 +5,12 @@
 // ── Navigation toggle (mobile) ──────────────────
 const navToggle = document.querySelector('.nav-toggle');
 const navMobile = document.querySelector('.nav-mobile');
+const nav       = document.querySelector('.nav');
 
 if (navToggle && navMobile) {
   navToggle.addEventListener('click', () => {
     navMobile.classList.toggle('open');
+    nav.classList.toggle('menu-open');
     // Animate hamburger to X
     const spans = navToggle.querySelectorAll('span');
     const isOpen = navMobile.classList.contains('open');

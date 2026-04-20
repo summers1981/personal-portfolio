@@ -269,8 +269,10 @@ strong { color: var(--text); font-weight: 600; }
   align-items: center;
   justify-content: center;
   gap: 8px;
-  z-index: 99;
+  z-index: 101;
 }
+
+.nav.menu-open { z-index: 102; background: transparent; border-bottom-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
 
 .nav-mobile.open { display: flex; }
 
